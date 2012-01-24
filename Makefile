@@ -14,4 +14,4 @@ clean:
 	rm -f $(MAIN_TEX_FILE).bbl
 	rm -f $(MAIN_TEX_FILE).blg
 
-.PHONY: all
+.PHONY: all clean

@@ -1,12 +1,22 @@
 \documentclass[conference]{IEEEtran}
 \usepackage{times}
 
+\ifCLASSINFOpdf
+  \usepackage[pdftex]{graphicx}
+  \graphicspath{images/}
+\else
+  \usepackage[dvips]{graphicx}
+  \graphicspath{images/}
+\fi
+
 % numbers option provides compact numerical references in the text.
 \usepackage[numbers]{natbib}
 \usepackage{multicol}
 \usepackage[bookmarks=true]{hyperref}
 \usepackage{color}
 \usepackage{amsmath}
+
+\usepackage[squaren, Gray, cdot]{SIunits}
 
 % Commands and other stuff
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -59,7 +69,13 @@
 %Telephone: (800) 555--1212, Fax: (888) 555--1212}
 %\authorblockA{\authorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
 
-%
+% LAAS authors:
+% \author{ \parbox{3 in}{\centering Thomas Moulard, Florent Lamiraux, Olivier Stasse\\
+%    LAAS-CNRS, Universit\'e de Toulouse\\
+%    7, avenue du Colonel Roche\\
+%    31077 Toulouse cedex 4, France\\
+%    {\tt\small thomas.moulard@laas.fr}}
+%}
 
 \maketitle
 
@@ -73,6 +89,8 @@ The abstract goes here.
 \input{src/related_work.tex}
 \input{src/stereo.tex}
 \input{src/vision_based_localization.tex}
+\input{src/xp_results.tex}
+\input{src/conclusion.tex}
 
 \section*{Acknowledgments}
 
