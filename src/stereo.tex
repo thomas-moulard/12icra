@@ -81,7 +81,7 @@ algorithm for all the nonlinear optimizations.
 When the accumulated motion in translation or rotation from the visual
 odometry module is higher than a fixed threshold we decide to create a
 new \textit{keyframe}. This keyframe, will be optimized later in a
-local bundle adjusment procedure. In the local bundle adjustment
+local bundle adjustment procedure. In the local bundle adjustment
 optimization, 3D points and camera poses are refined simultaneously
 through the sequence. Similar to~\cite{Mouragnon09ivc} we use a
 sliding window approach taking into account the last $N$ keyframes,
@@ -105,3 +105,9 @@ higher than a fixed threshold (e.g. 3 pixels).
 By means of appearance based methods, loop closure situations can be
 detected and the residual error in the 3D reconstruction can be
 corrected in a global BA procedure.
+
+
+%%% Local Variables:
+%%% ispell-local-dictionary: "american"
+%%% LocalWords:  odometry HRP
+%%% End:

@@ -73,10 +73,18 @@ the robot head to provide ground truth.
 
 \begin{figure}[ht!]
   \begin{center}
-    FIXME
+    \includegraphics[width=\linewidth]{images/rss_framework.png}
   \end{center}
-  \caption{Complete robotics framework
-    overview. \label{fig:framework_overview}}
+  \caption{Complete robotics framework overview. Let
+    $\mathbf{I}_{\text{left}}$, $\mathbf{I}_{\text{right}}$ be
+    respectively the left and right camera
+    images. $\mathit{T}_{\text{cam}}$, $\mathit{\hat{T}}_{\text{cam}}$
+    respectively the planned and estimated camera
+    position. $\mathbf{\gamma}$ the concatenation of the left ankle,
+    right ankle, upper body and center of mass
+    trajectories. $\mathbf{\gamma'}$ the trajectories reshaped by
+    taking into account execution
+    errors.\label{fig:framework_overview}}
 \end{figure}
 
 
@@ -124,7 +132,7 @@ Intel\textregistered Core\texttrademark\ 2 CPU T7200~@~2.00GHz with 2Gb.\ of RAM
 
 The Table.~\ref{tab:mocap_comparison} contains the camera position
 estimated by the motion capture system and by the visual SLAM
-algorithm. The mean error is FIXME meters and FIXME rads. Drop in the
+algorithm. The mean error is FIXME meters and FIXME rad. Drop in the
 algorithm precision can occur when the robot enters a part of the map
 which is not dense enough or where the environment does not
 incorporate enough texture to detect enough interest points.

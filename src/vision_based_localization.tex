@@ -147,7 +147,7 @@ following steps:
 \begin{enumerate}
 \item[i] While the robot is moving, the stereo pair acquires a new set of images from which the disparity map is computed.
 \item[ii] A set of image features $Z_{t}=\{z_{t,1} \ldots z_{t,n}\}$ are detected by Harris corner detector only in the left image. Then, a feature descriptor is computed for each of the detected features.
-\item[iii] Then, by using the visibility predicition algorithm, a promising subset of highly visible 3D map points is chosen and re-projected onto the image plane based on the estimated previous camera pose $\theta_{t-1}$ and known camera parameters.
+\item[iii] Then, by using the visibility prediction algorithm, a promising subset of highly visible 3D map points is chosen and re-projected onto the image plane based on the estimated previous camera pose $\theta_{t-1}$ and known camera parameters.
 \item[iv] Afterwards, a set of putative matches $C_{t}$ are formed where the i-th putative match $C_{t,i}$ is a pair $\{z_{t,k},x_{j}\}$ which comprises of a detected feature $z_{k}$ and a map element $x_{j}$. A putative match is created when the Euclidean distance between the appearance descriptors of a detected feature and a re-projected map element is lower than a certain threshold.
 \item[v] Finally, we solve the pose estimation problem minimizing the following cost error function, given the set of putative matches $C_{t}$:
 %
@@ -183,3 +183,9 @@ When the number of consecutive frames where the pose estimation
 problem fails is higher than a fixed threshold (e.g. 100 frames), we
 declare that the tracking is lost and start a re-localization process
 based on appearance information.
+
+
+%%% Local Variables:
+%%% ispell-local-dictionary: "american"
+%%% LocalWords:  odometry HRP
+%%% End:
