@@ -1,0 +1,185 @@
+\section{Vision-Based Localization}\label{sec:localization}
+Our novel vision-based localization approach combines efficient
+monocular vision-based localization techniques with visibility
+prediction and stereo visual odometry, exploiting all the vision
+capabilities of the HRP-2 robot.
+
+Once we have computed a 3D map of the environment by means of the
+described visual SLAM technique, we can use that map for fast and
+robust localization. In this context we employ the visibility
+prediction technique described in~\cite{Alcantarilla11icra} to perform
+an efficient data association between known 3D points and detected 2D
+features. This technique has been proved successfully for monocular
+vision-based localization in office-like environments
+in~\cite{Alcantarilla10icra}.
+
+Now, we will describe how to perform an efficient visibility
+prediction of known 3D points and our overall vision-based
+localization framework.
+
+%*******************************************************************************************
+%*******************************************************************************************
+\subsection{Visibility Prediction of known 3D Points}\label{sec:visibility}
+Visibility prediction is a commonly used
+technique~\cite{Alcantarilla11icra} to greatly reduce the ambiguities
+and speed up the data association by making an accurate and robust
+prediction of the most likely visible 3D points for a given camera
+pose. More specifically, in the visibility prediction problem, we are
+interested in the posterior distribution of the visibility $v_{j}$ for
+a certain 3D point $x_{j}$ given the query camera pose $\theta$,
+denoted as $P(v_{j} \vert \theta)$.
+
+We take the visibility prediction approach described
+in~\cite{Alcantarilla11icra} as the basis for our vision-based
+localization algorithm. In the mentioned work, they describe how the
+visibility of known 3D points can be approximated by using a form of
+lazy and memory-based learning technique known as \textit{Locally
+  Weighted Learning}~\cite{Atkeson97ai}. This technique is a simple
+memory-based classification algorithm and can be implemented very
+efficiently. The idea is very simple: given the training data that
+consists of a set of reconstructed camera poses $\Theta =
+\left\{\theta_1 \ldots \theta_N \right\}$, the 3D point cloud $X =
+\left\{x_1 \ldots x_M\right\}$ and a query camera pose $\theta$, we
+form a locally weighted average at the query point and take that as an
+estimate for $P(v_{j} \vert \theta)$ as follows:
+%
+\begin{equation} \label{eq:locally_weighted}
+ P(v_j \vert \theta) \approx \frac{\sum\limits_{i=1}^{N} k(\theta,\theta_{i})\cdot v_j(\theta_i)}{\sum\limits_{i=1}^{N} k(\theta,\theta_{i})}
+\end{equation}
+% where the function $k(\theta,\theta_{i})$ is a kernel function that
+measures the similarity between two camera poses, and the function
+$v_{j}(\theta_i)$ just assigns a real value equal to 1 for those cases
+where a certain 3D point $x_{j}$ is visible by a camera pose
+$\theta_{i}$ and 0 otherwise. In the end, the main problem is finding
+an appropriate kernel function $k(\theta,\theta_{i})$ that captures
+correctly the similarity between two camera poses, emphasizing similar
+ones and deemphasizing very different camera poses.
+
+The kernel function is learnt by combining the Gaussian kernel and
+Mahalanobis distance as described in~\cite{Alcantarilla11icra}. More
+in detail, we need to learn the kernel parameters from the training
+data, by fitting the kernel function to a set of target values. These
+target values $y_{ij}$ are defined as the mean of the ratios between
+the intersection of the common 3D points with respect to the number of
+3D points visible to each of the two cameras:
+%
+\begin{equation}\label{eq:similarity_weighted}
+y_{ij} = \frac{1}{2}\cdot \left| \frac{\left|X_i \cap X_j \right|}{\left|X_i\right|} + \frac{\left|X_j \cap X_i\right|}{\left|X_j\right|} \right|
+\end{equation}
+%
+Finally, the expression of the kernel function that measures the similarity between two camera poses is:
+%
+\begin{equation}\label{eq:visibility_metric}
+ k_{ij} \equiv k(\vec{\theta}_i,\vec{\theta}_j) =\exp\left(-\left\| \mathbf{A}(\vec{\theta}_i-\vec{\theta}_j)\right\|_{2}\right)
+\end{equation}
+%
+where $\mathbf{A}$ is a $n \times n$ matrix, being $n$ the number of
+cues used in the proposed metric. In this work, each camera pose is
+parametrized by means of a vector $\vec{\theta}_i =
+\left\{T_{i},R_{i}\right\}$ (3D vector for the translation and 4D unit
+quaternion for the rotation). For simplicity, we just use two cues in
+the proposed metric: difference in camera translation and dot product
+between cameras viewing directions vectors, capturing efficiently the
+differences between camera poses due to changes in translation and
+orientation.
+
+As explained in~\cite{Alcantarilla11icra}, the visibility posterior
+can be approximated by just considering the K Nearest Neighbors (KNNs)
+of the current query pose $\theta_{t}$. As a consequence, once we find
+the KNNs of the current query pose, we only need to predict the
+visibilities for the subset of map elements which are at least seen
+once by these KNNs. Then, we can set the visibilities to be zero for
+the rest of map elements. Finally, we obtain the locally weighted $K$
+nearest neighbor approximation for the visibility posterior as
+follows:
+%
+\begin{equation} \label{eq:KNNVisibility}
+P(v_{j}=1|\theta) \approx \frac{\sum\limits_{i=1}^{K}k(\theta,\theta_{i}^{v_{j}=1})}{\sum\limits_{i=1}^{K}k(\theta,\theta_{i})}
+\end{equation}
+%
+where only the nearest $K$ samples of the query pose
+$\Theta^{K}=\left\{\theta_{1} \ldots \theta_{k}\right\}$ are
+considered.
+
+%*******************************************************************************************
+%*******************************************************************************************
+\subsection{Localization Algorithm}\label{sec:localization_algorithm}
+Our localization framework is composed of two different modules:
+initialization (re-localization) and a combination between
+vision-based localization with visibility prediction and stereo visual
+odometry. Now, we will describe each of the different modules.
+
+%*******************************************************************************************
+%*******************************************************************************************
+\subsubsection{Initialization (Re-Localization)}
+During the initialization, the robot can be located in any particular
+area of the map. Therefore, we need to find a prior camera pose to
+initialize the vision-based localization algorithm. For this purpose,
+we compute the appearance descriptors of the detected 2D features in
+the new image and match this set of descriptors against the set of
+descriptors from the list of stored keyframes from the previous 3D
+reconstruction. In the matching process between the two frames, we
+perform a RANSAC procedure forcing epipolar geometry constraints. We
+recover the camera pose from the stored keyframe that obtains a higher
+inliers ratio score. If this inliers ratio is lower than a certain
+threshold, we do not initialize the localization algorithm until the
+robot moves into a known area yielding a high inliers ratio. At this
+point, we are confident about the camera pose prior and initialize the
+localization process with the camera pose parameters of the stored
+keyframe with the highest score.
+
+Eventually, it may happen that the robot gets lost due to bad
+localization estimates or robot kidnapping situations. In those cases,
+we perform a fast re-localization by checking the set of appearance
+descriptors of the robot's new image against only the stored set of
+descriptors of the keyframes that are located in a certain distance
+area of confidence centered in the last accepted camera pose estimate.
+
+%*******************************************************************************************
+%*******************************************************************************************
+\subsubsection{Vision-Based Localization}
+Given a prior map of 3D points and perceived 2D features in the image,
+our problem to solve is the estimation of the camera pose with respect
+to the world coordinate frame. Once the system has a good
+initialization, the vision-based localization system works through the
+following steps:
+%
+\begin{enumerate}
+\item[i] While the robot is moving, the stereo pair acquires a new set of images from which the disparity map is computed.
+\item[ii] A set of image features $Z_{t}=\{z_{t,1} \ldots z_{t,n}\}$ are detected by Harris corner detector only in the left image. Then, a feature descriptor is computed for each of the detected features.
+\item[iii] Then, by using the visibility predicition algorithm, a promising subset of highly visible 3D map points is chosen and re-projected onto the image plane based on the estimated previous camera pose $\theta_{t-1}$ and known camera parameters.
+\item[iv] Afterwards, a set of putative matches $C_{t}$ are formed where the i-th putative match $C_{t,i}$ is a pair $\{z_{t,k},x_{j}\}$ which comprises of a detected feature $z_{k}$ and a map element $x_{j}$. A putative match is created when the Euclidean distance between the appearance descriptors of a detected feature and a re-projected map element is lower than a certain threshold.
+\item[v] Finally, we solve the pose estimation problem minimizing the following cost error function, given the set of putative matches $C_{t}$:
+%
+\begin{equation} \label{eq:pose_estimation}
+\argmin \limits_{\emph{R},\mathbf{t}} \sum \limits_{i=1}^{m} \left\|z_{i} - K \left(\emph{R}\cdot x_{i} + \mathbf{t} \right)\right\|_{2}
+\end{equation}
+%
+\end{enumerate}
+
+where $z_{i}=\left(u_{L},v_{L}\right)$ is the 2D image location of a
+feature in the left camera, $x_{i}$ represents the coordinates of a 3D
+point in the global coordinate frame, $K$ is the left camera
+calibration matrix, and $R$ and $t$ are respectively the rotation and
+the translation of the left camera with respect to the global
+coordinate frame. The pose estimation problem is formulated as a
+nonlinear least squares procedure using the Levenberg-Marquardt
+algorithm. The set of putative matches may contain outliers, therefore
+RANSAC is used in order to obtain a robust model free of outliers.
+
+There can be some frames where the pose estimation problem cannot be
+solved efficiently since we may have textureless areas or slightly
+different viewpoints from the ones captured at the mapping
+sequence. For those situations, we employ stereo visual odometry to
+update the pose of the robot with respect to the map coordinate
+frame. We match the set of features between two consecutive steps and
+compute the incremental pose as described in
+Section~\ref{sec:visual_odometry}. Notice here that our system does
+not suffer from the typical drift of visual odometry systems, since in
+the next frame the system will try to localize with respect to the
+prior 3D map using visibility prediction.
+
+When the number of consecutive frames where the pose estimation
+problem fails is higher than a fixed threshold (e.g. 100 frames), we
+declare that the tracking is lost and start a re-localization process
+based on appearance information.
