@@ -7,8 +7,8 @@ following notations:
 
 \begin{description}
 \item[$\text{SE}(2)$ and $\text{SE}(3)$]\hspace{1.45cm} the Special
-  Euclidian groups of dimension 2 and 3 denotes rigid transformations
-  in the 2d and 3d Euclidian spaces.
+  Euclidian groups of dimension 2 and 3 denote rigid transformations
+  in the 2d and 3d Euclidian spaces respectively.
 \item[$\mathbf{\bar{q}}(t)$] denotes the robot configuration in its
   configuration space $\mathcal{\bar{C}}$ at time $t$. It is divided
   into a controllable part $\mathbf{q}(t) \in \mathcal{C}$ and the
@@ -33,9 +33,9 @@ following notations:
 \end{description}
 
 The set of trajectories $\mathbf{\gamma_{\text{la}}}$,
-$\mathbf{\gamma_{\text{ra}}}$ and $\mathbf{c}$ define a complete
+$\mathbf{\gamma_{\text{ra}}}$ and $\mathbf{c}$ defines a complete
 balanced walking movement and is denoted $\mathbf{\Gamma}$. It can be
-completed by an additional trajectory which define the upper-body
+completed by an additional trajectory which defines the upper-body
 configuration during the walk. Changes in the upper-body posture do
 not impact the walking movement as long as the center of mass
 trajectory is respected. Therefore, this article will not mention
@@ -128,9 +128,9 @@ Regarding trajectory generation, we use the planner described in
 \cite{Dalibard11humanoids} to generate the required reference
 trajectories.
 
-Our control scheme adds an additional step which processes the
-reference trajectories to compensate for execution errors based on the
-error estimation.
+Our control scheme adds a step which processes the reference
+trajectories to compensate for execution errors based on the error
+estimation.
 
 Let us consider that at time $t$, the robot is on double support
 (i.e.\ both feet on the ground) and that an estimation of the
@@ -173,10 +173,10 @@ $t_{\text{end}}$, we consider the following constraints:
 \label{eq:deltaConstraints}
 \end{equation}
 
-The constraints expressed in Eq.~\ref{eq:deltaConstraints} insures
-that the correction is smooth: null velocity at the beginning and end
-of the correction and that the error is correctly compensated. They
-are independent from the corrected trajectory (ankles or center of
+The constraints expressed in Eq.~\ref{eq:deltaConstraints} insure that
+the correction is smooth: null velocity at the beginning and end of
+the correction and that the error is correctly compensated. They are
+independent of the corrected trajectory (ankles or center of
 mass). These four constraints fully determine the four coefficients of
 the polynomial.
 
@@ -191,7 +191,7 @@ The starting and timing correction time depends on the corrected trajectory:
 \end{description}
 
 
-The remaining issue is insuring that the updated trajectory will be
+The remaining issue is ensuring that the updated trajectory will be
 balanced. A classical approach is using the Zero Momentum Point: this
 virtual point acts as a criterion to determine whether a trajectory is
 balanced or not. If it lies in the convex hull of the robot contact
@@ -212,7 +212,7 @@ the robot on the ground and $\textbf{L}$ is the angular momentum of
 the robot about the center of mass.
 
 
-Solving this equation is time consuming as it is non-linear and
+Solving this equation is time consuming as it is nonlinear and
 requires dynamics computation. Under additional assumptions detailed
 in~\cite{Kajita01iros}, we can obtain a simplified linear model:
 %
@@ -248,16 +248,15 @@ $\mathbf{\delta x}$. The only limitations are feet velocities limits
 and assumptions realized when using the simplified linear model.
 
 To correct properly the robot trajectory, a correction of about two to
-three centimeters every two steps is sufficient. In this particular
-case, the simplified linear model is particularly suited as the
-dynamical effects of such changes are so low they can be safely
-ignored.
+three centimeters every two steps is sufficient. In this case, the
+simplified linear model is particularly well suited as the dynamical
+effects of such changes are so low they can be safely ignored.
 
 When a correction is completely applied, i.e.\ $t > t_2$, a new
 correction is computed using the current estimation of the execution
 error.
 
-By combining, vision-based localization, error estimation and
+By combining vision-based localization, error estimation and
 closed-loop trajectory following, our control framework can reshape
 walking trajectories on the fly to reliably track the planned
 trajectory. We will focus the discussion in the next section on how to
