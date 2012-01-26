@@ -79,6 +79,7 @@
 @string{JOSAA = "Journal of the Optical Society of America A"}
 @string{tcs   = "Theoretical Computer Science"}
 @string{AR    = "Autonomous Robots"}
+@string{ADR    = "Advanced Robotics"}
 @string{JEPLMC= "Journal of Experimental Psychology: Learning,Memory, \& Cognition"}
 @string{MVA = "Machine Vision and Applications"}
 
@@ -114,10 +115,11 @@
 @string{FSR = "Field and Service Robotics (FSR)"}
 @string{RSS = "Robotics: Science and Systems (RSS)"}
 @string{CIRA = "IEEE Intl. Symp. on Computational Intelligence in Robotics and Automation (CIRA)"}
-@string{ISRR = "Proc. of the Intl. Symp. of Robotics Research (ISRR)"}
+@string{ISRR = "Intl. Symp. of Robotics Research (ISRR)"}
 @string{HUMANOIDS = "IEEE-RAS Intl. Conference on Humanoid Robots"}
 @string{SMC = "IEEE Intl. Conference on Systems, Man and Cybernetics"}
 @string{ROMAN = "IEEE Intl. Symposium on Robot and Human Interactive Communication (RO-MAN)"}
+@string{ICAR = "Intl. Conf. on Advanced Robotics (ICAR)"}
 
 %Medical Conferences
 @string{MICCAI = "Medical Image Computing and Computer Assisted Intervention (MICCAI)"}
@@ -253,12 +255,71 @@
   pages = {637--643}
 }
 
+@inbook{Chestnut10book,
+  author = {J.~Chestnut},
+  title = {\href{http://www.springer.com/engineering/robotics/book/978-1-84996-219-3}{Motion planning for humanoid robots}},
+  chapter = {Navigation and Gait Planning},
+  publisher = {Springer},
+  year = 	 2010,
+  edition = {{K}.~{H}arada and {E}.~{Y}oshida and {K}.~{Y}okoi}
+  }
+
+
+@inproceedings{Dalibard11humanoids,
+	author = {S. Dalibard and A. El Khoury and F. Lamiraux and M. Taix and J.-P. Laumond},
+	title = {\href{http://hal.archives-ouvertes.fr/docs/00/62/46/84/PDF/dalibard-humanoids11.pdf}{Small-space controllability of a walking humanoid robot}},
+	booktitle = HUMANOIDS,
+	year={2011},
+	pages={739--744},
+	address = {Bled, Slovenia}
+}
+
+@article{Davison07pami,
+ author = {A. J. Davison and I. D. Reid and N. D. Molton and O. Stasse},
+ title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=4160954}{Mono{SLAM}: Real-Time Single Camera {SLAM}}},
+ journal = PAMI,
+ volume = {29},
+ number = {6},
+ pages = {1052--1067},
+ year = {2007}
+ }
+
+@inproceedings{Dimitrov11icra,
+	author = {D. Dimitrov and A. Paolillo, Antonio and P.-B. Wieber},
+	title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5979671}{Walking motion generation with online foot position adaptation based on l1- and l$\infty$-norm penalty formulations}},
+	booktitle = ICRA,
+	year={2011},
+	address={Shanghai, China}
+}
+
+@inproceedings{Dune10iros,
+author={C. Dune and A. Herdt and O. Stasse and P.-B. Wieber and K. Yokoi and E. Yoshida},
+booktitle={Intelligent Robots and Systems (IROS), 2010 IEEE/RSJ International Conference on},
+title={\href{http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=5649126&tag=1}{Cancelling the sway motion of dynamic walking in visual servoing}},
+year={2010},
+month={oct.},
+volume={},
+number={},
+pages={3175 -3180},
+keywords={center of mass;center of pressure;control law;dynamic walking;humanoid walking;image space;perception-decision-action scheme;reactive pattern generator;reference velocity;sway motion;trajectories;visual servoing;gait analysis;humanoid robots;position control;visual servoing;},
+doi={10.1109/IROS.2010.5649126},
+ISSN={2153-0858},}
+
 @inproceedings{Harris88avc,
   author = 	 {C. Harris and M. Stephens},
   title = 	 {A combined corner and edge detector},
   booktitle = {Proc. Fourth Alvey Vision Conference},
   pages = 	 {147--151},
   year = 	 {1988}
+ }
+
+@inproceedings{Harada04humanoids,
+ author = {K. Harada and S. Kajuta and K. Kaneko and H. Hirukawa},
+ title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=1442676}{An analytical method on real-time gait planning for a humanoid robot}},
+ booktitle = HUMANOIDS,
+ year = 2004,
+ pages = {640--655},
+ address = {Los Angeles, CA, USA}
  }
 
 @article{Hartley99ijcv,
@@ -271,6 +332,25 @@
   year = {1999}
 }
 
+@article{Herdt10adr,
+	author = {A. Herdt and H. Diedam and P.-B. Wieber and D. Dimitrov and K. Mombaur and M. Diehl},
+	title = {\href{http://www.ingentaconnect.com/content/vsp/arb/2010/00000024/F0020005/art00006}{Online Walking Motion Generation with Automatic Foot Step Placement}},
+	journal = ADR,
+	volume={24},
+	number={5-6},
+	pages={719--737},
+	year={2010}
+}
+
+@inproceedings{Hornung10iros,
+ author = {A. Hornung and K.M. Wurm and M. Bennewitz},
+ title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5649751}{Humanoid Robot Localization in Complex Indoor Environments}},
+ booktitle = IROS,
+ address = {Taipei, Taiwan},
+ pages = {1690--1695},
+ year = {2010}
+ }
+
 @inproceedings{Kaess09icra,
  author = {Kaess, M. and Ni, K. and Dellaert, F},
  title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5152333}{Flow separation for fast and robust stereo odometry}},
@@ -278,6 +358,86 @@
  address = {Kobe, Japan},
  year = {2009}
 }
+
+@inproceedings{Kajita01iros,
+  author = {S. Kajita and F. Kanehiro and K. Kaneko and K. Yokoi and H. Hirukawa},
+  title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=973365}{The {3D} linear inverted pendulum mode: a simple modeling for a biped walking pattern generation}},
+  booktitle = IROS,
+  pages = 	 {239--246},
+  year = 	 2001,
+  address = {Maui, HI, USA}
+  }
+
+@inproceedings{Kaneko04icra,
+author={K. Kaneko and F. Kanehiro and S. Kajita. and H. Hirukawa and T. Kawasaki and M. Hirata and K. Akachi and T. Isozumi},
+booktitle={Robotics and Automation, 2004. Proceedings. ICRA '04. 2004 IEEE International Conference on},
+title={\href{http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1307969}{Humanoid robot {HRP-2}}},
+year={2004},
+month={26-may 1,},
+volume={2},
+number={},
+pages={ 1083 - 1090 Vol.2},
+keywords={Japan; biped locomotion; body motion; electrical systems; humanoid robot HRP-2; humanoid robotics project; prototype; robotics platform; uneven surface; legged locomotion; motion control;},
+doi={10.1109/ROBOT.2004.1307969},
+ISSN={1050-4729 },}
+
+@inproceedings{Kanoun10humanoids,
+	author={O. Kanoun and J.-P. Laumond},
+	title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5686301}{Optimizing the stepping of a humanoid robot for a sequence of tasks}},
+	booktitle = HUMANOIDS,
+	year={2010},
+	pages={204--209},
+	address = {Nashville, TN, USA}
+}
+
+@article{Konolige08tro,
+ author = {K. Konolige and M. Agrawal},
+ title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=4648456}{{FrameSLAM}: from bundle adjustment to real-time visual mapping}},
+ journal = TRO,
+ volume = {24},
+ number = {5},
+ month = {Oct},
+ year = {2008},
+ pages = {1066--1077}
+ }
+
+@inbook{Luca98book,
+  author = 	 {A.~de Luca and G. Oriolo and C. Samson},
+  title = 	 {Robot motion planning and control},
+  chapter = 	 {Feedback Control of a Nonholonomic Car-like Robot},
+  publisher = 	 {Springer},
+  year = 	 1998,
+  number = 	 {ISBN 3-540-76219-1},
+  series = 	 {Lectures Notes in Control and Information Sciences 229},
+  edition = 	 {{J}ean-{P}aul {L}aumond}
+}
+
+@inproceedings{Mansard09icar,
+	author = {N. Mansard and O. Stasse and P. Evrard and A. Kheddar},
+	title={\href{http://homepages.laas.fr/nmansard/article/2009_icar_mansard.pdf}{A versatile Generalized Inverted Kinematics implementation for collaborative working humanoid robots: The Stack Of Tasks}},
+	booktitle= ICAR,
+	pages={1--6},
+	year={2009},
+	address = {Munich, Germany}
+}
+
+@inproceedings{Michel05humanoids,
+ 	author = {P. Michel and J. Chestnutt and J. Kuffner and T. Kanade},
+ 	title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=1573538}{Vision-guided humanoid f	ootstep planning for dynamic environments}},
+ 	booktitle = HUMANOIDS,
+ 	year = {2005},
+ 	pages = {13--18},
+ 	address = {Tsukuba, Japan}
+ }
+
+@inproceedings{Michel06icra,
+	author = {P. Michel and J. Chestnut and S. Kagami and K. Nishiwaki and J. Kuffner and T. Kanade},
+	title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=1642171}{Online environment reconstruction for biped navigation}},
+	booktitle = ICRA,
+	pages = {3089--3094},
+	year = 2006,
+	address = {Orlando, FL, USA}
+	}
 
 @article{Mouragnon09ivc,
  author = {E. Mouragnon and M. Lhuillier and M. Dhome and F. Dekeyser and P. Sayd},
@@ -289,271 +449,83 @@
  year = {2009}
  }
 
-@inproceedings{Dalibard11humanoids,
-author={S.~Dalibard and A.~El~Khoury and F.~Lamiraux and M.~Taix and J.-P.~Laumond},
-booktitle={11th IEEE-RAS Intl. Conference on Humanoid Robots},
-title={\href{http://hal.archives-ouvertes.fr/docs/00/62/46/84/PDF/dalibard-humanoids11.pdf}{Small-space controllability of a walking humanoid robot}},
-year={2011},
-month={oct.},
-volume={},
-number={},
-pages={739 -744},
-keywords={},
-doi={10.1109/Humanoids.2011.6100807},
-ISSN={2164-0572},}
+@inproceedings{Nister04cvpr,
+ author = {D. Nist\'er and O. Naroditsky and J. Bergen},
+ title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=1315094}{Visual Odometry}},
+ booktitle = CVPR,
+ year = {2004},
+ address = {Washington, USA}
+ }
 
-@inproceedings{Mansard09icar,
-author={Mansard, N. and Stasse, O. and Evrard, P. and Kheddar, A.},
-booktitle={Proc. of the International Conference on Advanced Robotics (ICAR)},
-title={\href{http://homepages.laas.fr/nmansard/article/2009_icar_mansard.pdf}{A versatile Generalized Inverted Kinematics implementation for collaborative working humanoid robots: The Stack Of Tasks}},
-year={2009},
-month={june},
-volume={},
-number={},
-pages={1-6},
-doi={},
-ISSN={},
+@inproceedings{Ozawa05smc,
+	author    = {R. Ozawa and Y. Takaoka and Y. Kida and K. Nishiwaki and J. Chestnutt and J. Kuffner},
+	title     = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=1571548}{Using visual odometry to create {3D} maps for online footstep planning}},
+	booktitle = SMC,
+	pages = {2643--2648},
+	address = {Hawaii, USA},
+	year      = {2005}
 }
 
-
-@STRING{
-IEEE_HUMANOIDS04 = {4th {IEEE}/{RAS}
-{I}nternational {C}onference on {H}umanoid {R}obots ({H}umanoids)}
+@inproceedings{Perrin10icra,
+  author = {N. Perrin and O. Stasse and F. Lamiraux and E. Yoshida},
+  title ={\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5509395}{Approximation of Feasibility Tests for Reactive Walk on {HRP-2}}},
+  booktitle = ICRA,
+  address = {Anchorage, AK, USA},
+  year = {2010},
+  pages = {4243--4248}
 }
 
-@STRING{
-IEEE_HUMANOIDS05 = {5th {IEEE}/{RAS}
-{I}nternational {C}onference on {H}umanoid {R}obots ({H}umanoids)}
+@inproceedings{Perrin11icra,
+   author = {N. Perrin and O. Stasse and F. Lamiraux and E. Yoshida},
+   title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5979917}{A Biped Walking Pattern Generator based on Half-Steps for Dimensionality Reduction}},
+   booktitle = ICRA,
+   address = {Shanghai, China},
+   pages = {1270--1275},
+   year = {2011}
 }
 
-@STRING{
-IEEE_HUMANOIDS10 = {10th {IEEE}/{RAS}
-{I}nternational {C}onference on {H}umanoid {R}obots ({H}umanoids)}
+@inproceedings{Stasse06iros,
+  author = {O. Stasse and A.J. Davison and R. Sellaouti and K. Yokoi},
+  title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=4058956}{Real-time {3D SLAM} for a humanoid robot considering pattern generator information}},
+  booktitle = IROS,
+  pages = {348--355},
+  address = {Beijing, China},
+  year = 2006
 }
 
-@STRING{
-IEEE_HUMANOIDS11 = {11th {IEEE}/{RAS}
-{I}nternational {C}onference on {H}umanoid {R}obots ({H}umanoids)}
+@inproceedings{Strasdat10icra,
+  author = {H. Strasdat and J.M.M. Montiel and A.J. Davison},
+  title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5509636}{Real-time Monocular {SLAM}: Why Filter?}},
+  booktitle = ICRA,
+  address = {Anchorage, AK, USA},
+  pages = {2657--2664},
+  year = 2010
 }
 
-% Humanoid robotics
-
-@INPROCEEDINGS{04humanoids.harada,
-author={Harada, K. and Kajita, S. and Kaneko, K. and Hirukawa, H.},
-booktitle=IEEE_HUMANOIDS04,
-title={An analytical method on real-time gait planning for a humanoid
-                  robot},
-year={2004},
-month={nov.},
-volume={2},
-number={},
-pages={640-655},
-keywords={center of gravity; humanoid robot; quasi-real-time method;
-                  real-time gait planning; zero moment point;
-                  collision avoidance; humanoid robots; legged
-                  locomotion;},
-doi={10.1109/ICHR.2004.1442676},
-ISSN={ },
+@inproceedings{Thompson05humanoids,
+  author        = {S. Thompson and S. Kagami},
+  title         = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=1573539}{Humanoid robot localization using stereo vision}},
+  booktitle     = HUMANOIDS,
+  pages 				= {19--25},
+  address       = {Tsukuba, Japan},
+  year          = {2005}
 }
 
-@INPROCEEDINGS{10humanoids.kanoun,
-author={Kanoun, O. and Laumond, J.-P.},
-booktitle=IEEE_HUMANOIDS10,
- title={Optimizing the stepping of a humanoid robot for a sequence of
-                  tasks},
-year={2010},
-month={dec.},
-volume={},
-number={},
-pages={204-209},
-keywords={HRP-2;dynamic programming approach;humanoid robot;inverse
-                  kinematics problem;robot locomotion;stepping plan
-                  optimization problem;virtual redundant
-                  manipulator;dynamic programming;humanoid
-                  robots;legged locomotion;manipulator
-                  kinematics;redundant manipulators;},
-doi={10.1109/ICHR.2010.5686301},
-ISSN={},
+@inproceedings{Thompson06humanoids,
+	author	=	{S. Thompson and S. Kagami and K. Nishiwaki},
+	title = {\href{http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=4115574}{Localisation for Autonomous Humanoid Navigation}},
+	booktitle = HUMANOIDS,
+	pages={13--19},
+	year={2006},
+	address = {Genova, Italy}
 }
 
-
-@INPROCEEDINGS{11icra.perrin,
-author={Perrin N., Lamiraux F., Yoshida E.},
-booktitle=IEEE_ICRA,
-title={A Biped Walking Pattern Generator based on "Half-Steps" for
-                  Dimensionality Reduction},
-year={2011},
-month={may},
-volume={},
-number={},
-pages={1270-1275},
-}
-
-@INPROCEEDINGS{10icra.perrin,
-author={Perrin, N. and Stasse, O. and Lamiraux, F. and Yoshida, E.},
-booktitle=IEEE_ICRA,
-title={Approximation of feasibility tests for reactive walk on HRP-2},
-year={2010},
-month={may},
-volume={},
-number={},
-pages={4243-4248},
-keywords={feasibility test;legged humanoid robot;online motion
-                  planning;pattern generator;reactive walk;robot
-                  HRP-2;gait analysis;humanoid robots;legged
-                  locomotion;path planning;},
-doi={10.1109/ROBOT.2010.5509395},
-ISSN={1050-4729},
-}
-
-@INPROCEEDINGS{11icra.dimitrov,
-author={Dimitrov, Dimitar and Paolillo, Antonio and Wieber,
-                  Pierre-Brice},
-title={{Walking motion generation with online foot position adaptation
-                  based on l1- and l$\infty$-norm penalty
-                  formulations}},
-booktitle=IEEE_ICRA,
-year={2011},
-address={Shanghai, China},
-url={http://hal.inria.fr/inria-00567671/en}
-}
-
-@ARTICLE{10ar.herdt,
-author={Herdt, Andrei and Diedam, Holger and Wieber, Pierre-Brice and
-                  Dimitrov, Dimitar and Mombaur, Katja and Diehl,
-                  Moritz},
-title={{Online Walking Motion Generation with Automatic Foot Step
-                  Placement}},
-journal={{Advanced Robotics}},
-publisher={Brill Academic Publishers},
-volume={24},
-number={5-6},
-pages={719-737},
-year={2010},
-url={http://hal.inria.fr/inria-00391408/en}
-}
-
-@INPROCEEDINGS{06humanoids.thompson,
-author={Thompson, S. and Kagami, S. and Nishiwaki, K.},
-booktitle={Proc. of the 6th IEEE/RAS International Conference on
-                  Humanoid Robots (Humanoids)},
-title={Localisation for Autonomous Humanoid Navigation},
-year={2006},
-month={dec.},
-volume={},
-number={},
-pages={13 -19},
-keywords={autonomous humanoid navigation;bipedal locomotion;gaze
-                  attraction behaviour;humanoid position
-                  uncertainty;laser range sensor;motion
-                  model;nontrivial environment;particle
-                  filter;particle prediction;position accuracy;robot
-                  localisation;robot odometry;SLAM (robots);humanoid
-                  robots;laser ranging;legged locomotion;motion
-                  control;navigation;position control;},
-doi={10.1109/ICHR.2006.321357},
-ISSN={},
-}
-
-@INPROCEEDINGS{05humanoids.thompson,
-author={Thompson, S. and Kagami, S.},
-booktitle=IEEE_HUMANOIDS05,
-title={Humanoid robot localisation using stereo vision},
-year={2005},
-month={dec.},
-volume={},
-number={},
-pages={19 -25},
-keywords={2D localisation techniques;humanoid robot localisation;jerky
-                  video sequences;robot odometry;stereo vision;wheeled
-                  robots;control engineering computing;distance
-                  measurement;humanoid robots;image sequences;mobile
-                  robots;path planning;stereo image processing;},
-doi={10.1109/ICHR.2005.1573539},
-ISSN={},
-}
-
-@INPROCEEDINGS{06icra.nishiwaki,
-author={Nishiwaki, K. and Kagami, S.},
-booktitle=IEEE_ICRA,
-title={High frequency walking pattern generation based on preview
-                  control of ZMP},
-year={2006},
-month={may},
-volume={},
-number={},
-pages={2667-2672},
-keywords={ZMP;applied force change;dynamically stable humanoid walking
-                  pattern;high frequency walking pattern
-                  generation;horizontal torso trajectory;humanoid
-                  HRP-2;pattern updating;preview control;sensor
-                  feedback;short cycle generation;walking
-                  control;feedback;humanoid robots;legged
-                  locomotion;motion control;position
-                  control;predictive control;robot dynamics;},
-doi={10.1109/ROBOT.2006.1642104},
-ISSN={1050-4729},
-}
-
-@INPROCEEDINGS{05humanoids.michel,
-author={Michel, P. and Chestnutt, J. and Kuffner, J. and Kanade, T.},
-booktitle=IEEE_HUMANOIDS05,
-title={Vision-guided humanoid footstep planning for dynamic
-                  environments},
-year={2005},
-month={dec.},
-volume={},
-number={},
-pages={13-18},
-keywords={Honda ASIMO humanoid robot;biped humanoid robots;dynamic
-                  environments;obstacle avoidance;stable walking
-                  capabilities;time-limited planning
-                  horizon;vision-based sensing;vision-guided humanoid
-                  footstep planning;collision avoidance;humanoid
-                  robots;legged locomotion;robot dynamics;robot
-                  vision;},
-doi={10.1109/ICHR.2005.1573538},
-ISSN={},
-}
-
-@InBook{98deLucaOrioloSamson,
-  author = 	 {A.~de Luca and G. Oriolo and C. Samson},
-  title = 	 {Robot motion planning and control},
-  chapter = 	 {Feedback Control of a Nonholonomic Car-like Robot},
-  publisher = 	 {Springer},
-  year = 	 1998,
-  number = 	 {ISBN 3-540-76219-1},
-  series = 	 {Lectures Notes in Control and Information Sciences 229},
-  edition = 	 {{J}ean-{P}aul {L}aumond}
-}
-
-@InProceedings{06icra.MichelChestnut,
-  author = 	 {P.~Michel and J. Chestnut and S. Kagami and
-                  K. Nishiwaki and J. Kuffner and T. Kanade},
-  title = 	 {Online environment reconstruction for biped navigation},
-  booktitle = IEEE_ICRA,
-  pages = 	 {3089--3094},
-  year = 	 2006
-}
-
-@InBook{10springer.chestnut,
-  author = 	 {J.~Chestnut},
-  title = 	 {Motion planning for humanoid robots},
-  chapter = 	 {Navigation and Gait Planning},
-  publisher = 	 {Springer},
-  year = 	 2010,
-  edition = 	 {{K}.~{H}arada and {E}.~{Y}oshida and {K}.~{Y}okoi}}
-
-@InProceedings{01icra.KajitaKanehiro,
-  author = 	 {S.~Kajita and F.~Kanehiro and K.~Kaneko and K.~Yokoi
-                  and H.~Hirukawa},
-  title = 	 {The 3D linear inverted pendulum mode: a simple
-                  modeling for a biped walking pattern generation},
-  booktitle = IEEE_RSJ_IROS,
-  pages = 	 {239--246},
-  year = 	 2001}
-
-
+@misc{wikipedia.nao,
+   author = "Wikipedia",
+   title = "Nao (robot) --- Wikipedia{,} The Free Encyclopedia",
+   year = "2011",
+   url = "http://en.wikipedia.org/wiki/Nao_(robot)"
+ }
 
 
 %********************************************************************************************************

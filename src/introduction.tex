@@ -1,5 +1,67 @@
 \section{Introduction}~\label{sec:introduction}
 
+In this paper, we consider the problem of real-time realiable
+trajectory execution for humanoid robots. A precise localization on a
+humanoid robot is both crucial to achieve reliable trajectory
+execution and challenging due to humanoid robots specific features. We
+propose a novel control architecture for humanoid robots where the
+current localization of the robot is used by the robot controller and
+planner trajectory.
+
+The objective of this work is to localize the humanoid robot
+HRP-2~\cite{Kaneko04icra} while it is navigating through an indoor
+environment. We will show in this paper that precise localization on a
+humanoid robot is both crucial to achieve reliable trajectory
+execution and challenging due to humanoid robots specific features.
+
+Firstly, localization is crucial on a humanoid robot as its position
+cannot be controlled directly. Legs motion must be planned, which
+makes the assumption that all contacts will be perfect (i.e.\ no
+friction) during the movement. This is not the case in practice and
+leads to execution errors which cannot be ignored. Moreover, reactive
+control algorithms relies on the \textit{Linear Inverted Pendulum}
+model which produces rough trajectories~\cite{Kajita01iros}. This
+increases the gap between the generated motion and the executed
+one. Therefore, a reliable localization algorithm is important to
+allow reliable trajectory execution.
+
+Secondly, localization on a humanoid robot is challenging. Mobile
+robots odometry can be computed using wheel encoders and give a
+reasonable hint on the current robot motion. 2D maps can also be used
+to simplify the navigation through indoor environments. This is not
+the case on a legged robot on which 3D localization is required and
+where no encoder based reliable odometry exists~\citep{Hornung10iros}.
+
+Both of these reasons makes localization a cornerstone of reliable
+trajectory execution on humanoid robots. For obtaining an accurate
+localization of the robot in the environment, we employ fast
+vision-based localization techniques~\cite{Alcantarilla10icra} that
+assume a prior 3D map of the environment. These techniques perform
+\textit{visibility prediction}~\cite{Alcantarilla11icra}, that allows
+to perform a fast and robust data association between a large map of
+3D points and perceived 2D features in the image. We firstly build a
+3D map of the environment by means of stereo visual Simultaneous
+Localization and Mapping~(SLAM)~\cite{Davison07pami,Konolige08tro}
+techniques.
+
+In this article, the past results in vision processing on humanoids
+robots are presented in \ref{sec:related}. The section
+\ref{sec:architecture} is an overview of the robotics framework is
+provided to understand how the vision is linked to the robot
+controller. The vision based localization algorithm is described in
+detail in \ref{sec:vision}. A discussion of the experimental results
+and a comparisong toward motion capture data is presented in
+\ref{sec:results} and to finish the project roadmap is described in
+\ref{sec:conclusions}.
+
+\begin{figure}[ht]
+  \begin{center}
+    \TM{I usually put a big picture of the final demo here to make the
+      first page looks nicer.}
+  \end{center}
+  \caption{HRP-2 robot navigating through an indoor environment while
+    localizing itself.\label{fig:xp_final}}
+\end{figure}
 
 %%% Local Variables:
 %%% ispell-local-dictionary: "american"

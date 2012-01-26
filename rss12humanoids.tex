@@ -15,17 +15,22 @@
 \usepackage[bookmarks=true]{hyperref}
 \usepackage{color}
 \usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage{algorithmic, algorithm}
 
 \usepackage[squaren, Gray, cdot]{SIunits}
 
 % Commands and other stuff
 \DeclareMathOperator*{\argmin}{arg\,min}
 \newcommand{\PFA}[1]{{\color{red}\fbox{PFA:} #1}}
+\newcommand{\TM}[1]{{\color{blue}\fbox{TM:} #1}}
+\newcommand{\OS}[1]{{\color{green}\fbox{OS:} #1}}
 
 \begin{document}
 
-% paper title
-\title{Template paper for the \\Robotics: Science and Systems Conference}
+\title{Reliable indoor navigation on the HRP-2 humanoid robot using
+  vision-based localization}
 
 % You will get a Paper-ID when submitting a pdf file to the conference system
 \author{Author Names Omitted for Anonymous Review. Paper-ID [add your ID here]}
@@ -70,7 +75,7 @@
 %\authorblockA{\authorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
 
 % LAAS authors:
-% \author{ \parbox{3 in}{\centering Thomas Moulard, Florent Lamiraux, Olivier Stasse\\
+%\author{ \parbox{3 in}{\centering Thomas Moulard, Florent Lamiraux, Olivier Stasse\\
 %    LAAS-CNRS, Universit\'e de Toulouse\\
 %    7, avenue du Colonel Roche\\
 %    31077 Toulouse cedex 4, France\\
@@ -80,15 +85,29 @@
 \maketitle
 
 \begin{abstract}
-The abstract goes here.
+
+  Reliable localization on a humanoid robot is a \textit{sine qua non}
+  condition to succeed in realizing complex robotics scenarii. Before
+  dealing with perturbations and online modification of the
+  environment, one has to make sure that the planned trajectory alone
+  will be correctly followed. This paper demonstrates that a control
+  framework suited to humanoid robots integrated reliying on a vision
+  based localization system can achieve this goal. By compensating for
+  execution errors such as drifts and robot model errors, the HRP-2
+  robot is able to achieve high precision tasks.
+
 \end{abstract}
+
+\begin{IEEEkeywords}
+  Humanoid robots, Localization, Motion planning, Robot control, Stereo Vision
+\end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
 
 \input{src/introduction.tex}
 \input{src/related_work.tex}
-\input{src/stereo.tex}
-\input{src/vision_based_localization.tex}
+\input{src/architecture.tex}
+\input{src/vision.tex}
 \input{src/xp_results.tex}
 \input{src/conclusion.tex}
 

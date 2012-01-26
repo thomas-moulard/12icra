@@ -1,7 +1,63 @@
 \section{Related Work}\label{sec:related}
 
-\cite{05humanoids.thompson, 06humanoids.thompson, 05humanoids.michel, 06icra.MichelChestnut}
+Cameras seem to be an appealing sensor for humanoid robotics
+applications: they are small, cheap and light-weight compared to other
+sensors such as laser scanners. However, there have been only limited
+attempts at vision-based localization for humanoid robots. Ozawa et
+al.~\cite{Ozawa05smc} proposed to use stereo visual odometry to create
+local 3D maps for online footstep planning. The main drawback of this
+approach is the drift created by the accumulation of errors that
+typically occur in visual odometry
+systems~\cite{Nister04cvpr,Kaess09icra}. In addition, this approach
+lacks the ability to close loops and the local nature of the obtained
+3D maps prevents the final maps from longer-term mapping.
 
+Other past experiments where vision algorithms have been used to
+construct navigation maps for humanoid robots
+are~\cite{Michel05humanoids,Michel06icra,Chestnut10book}. However,
+most of these works have been focused on the humanoid trajectory
+generation replanning problem. In this paper, our approach is
+different: the objective is to execute a planned trajectory without
+any online replanning. The computation of a whole-body trajectory
+remains very costly and do not meet the real-time requirement of small
+robots such as Nao~\cite{wikipedia.nao}. Therefore, local trajectory
+deformation is important to achieve high reactivity and to avoid
+unnecessary computations.
+
+The work by Dune et al.~\cite{Dune10iros} relies on visual servoing to
+compute a center of mass reference velocity to control the walking
+trajectory generation algorithm described in~\cite{Herdt10adr}. By
+computing the foot placement online, one can control directly the
+robot center of mass velocity on a 2d plane and get rid of most of the
+complexity of the walking process. This approach is extremely
+interesting, but unfortunately do not take into account obstacles in
+the environment. Also, this algorithm is not suited to trajectory
+tracking which is our objective.
+
+~\citet{Davison07pami} showed succesful monocular SLAM results for
+small indoor environments using the HRP-2 robot. This approach, known
+as \textit{MonoSLAM}, is a monocular Extended Kalman Filter (EKF)
+vision-based system, that allows to build a small map of sparse 3D
+points. However, accurate results were only obtained when the pattern
+generator, the robot odometry and inertial sensing were fused to aid
+the visual mapping into the EKF framework as it was shown
+in~\cite{Stasse06iros}. The fusion of the information from different
+sensors can reduce considerably the uncertainty in the camera pose and
+the 3D map points involved in the EKF process, yielding better
+localization and mapping results.
+
+Despite of this, EKF-based approaches have important drawbacks such as
+the limited number of 3D points that can be tracked and divergence
+from the true solution due to linearization errors. As it has been
+shown recently in~\cite{Strasdat10icra}, nonlinear optimization
+techniques such as bundle adjustment~\cite{Mouragnon09ivc} are
+superior in terms of accuracy to filtering based methods, and allow to
+track many hundreds of features between frames. In this paper we use a
+stereo visual SLAM algorithm that is based on a local bundle
+adjustment procedure for building a 3D map of the environment. Then,
+we use the computed 3D map for efficient real-time vision based
+localization with visibility
+prediction~\cite{Alcantarilla10icra,Alcantarilla11icra}.
 
 %%% Local Variables:
 %%% ispell-local-dictionary: "american"

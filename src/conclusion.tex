@@ -1,7 +1,28 @@
 \section{Future Work and Conclusions}\label{sec:conclusions}
 
-The conclusion goes here.
+In this article, we demonstrated that vision based localization allows
+humanoid robots to achieve complex tasks. By integrating the vision
+algorithm into the control framework, we have been able to gradualy
+reshape the trajectory in order to compensate for execution
+errors. This allowed the robot to achieve complex tasks which would be
+difficult to realize otherwise.
 
+However, interesting several intesresting additions remains to be
+integrated. First, the local trajectory modifications are not checked
+to make sure that no auto-collision occurs. Currently, a conservative
+maximum correction (i.e.\ 2 centimeters every two steps) is imposed
+for safety. By applying recent works such as fast feasibility tests
+described by Perrin et al. in~\cite{Perrin10icra}, we would be able to
+increase the maximum correction without compromising the robot
+safety. Second, the HRP-2 robot embeds an Inertial Measurement Unit
+which could be used to estimate the robot chest attitude. It would
+definitively be interesting to provide an initial estimation of the
+robot motion to help the localization process. In addition, we are
+interested in improving the capabilities of our visual SLAM and
+vision-based localization systems towards the goal of long-term
+localization to deal with possible changes in the environment.
+
+\TM{Do we need more future work? / longer conclusion?}
 
 %%% Local Variables:
 %%% ispell-local-dictionary: "american"
