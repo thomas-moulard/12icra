@@ -124,6 +124,10 @@ ankles and center of mass reference trajectories. The inverse
 kinematics computation will then be implicitly realized by the task
 resolution.
 
+Regarding trajectory generation, we use the planner described in
+\cite{Dalibard11humanoids} to generate the required reference
+trajectories.
+
 Our control scheme adds an additional step which processes the
 reference trajectories to compensate for execution errors based on the
 error estimation.
