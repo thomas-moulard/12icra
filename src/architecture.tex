@@ -1,14 +1,64 @@
 \section{Robotics Framework for Reliable Trajectory Execution}\label{sec:architecture}
 
+\subsection{Notations}
+
+Before describing the robot architecture, let us introduce the
+following notations:
+
+\begin{description}
+\item[$\text{SE}(2)$ and $\text{SE}(3)$]\hspace{1.45cm} the Special
+  Euclidian groups of dimension 2 and 3 denotes rigid transformations
+  in the 2d and 3d Euclidian spaces.
+\item[$\mathbf{\bar{q}}(t)$] denotes the robot configuration in its
+  configuration space $\mathcal{\bar{C}}$ at time $t$. It is divided
+  into a controllable part $\mathbf{q}(t) \in \mathcal{C}$ and the
+  robot position $\mathbf{x}(t) \in \text{SE}(3)$. The robot position
+  is defined as the position of a particular robot body. In this
+  paper, we chose the left ankle as the reference body used to compute
+  the robot position. $\mathbf{\dot{q}(t)}$ describes the joint
+  velocities.
+\item[$\mathbf{x}_{\text{ref}}(t) \in \text{SE}(3)$] \hspace{1.2cm} is
+  the robot planned trajectory.
+\item[$\mathbf{\hat{x}}(t) \in \text{SE}(3)$] \hspace{.8cm} is the
+  robot trajectory as perceived by the localization system.
+\item[$\mathbf{c}(t) \in \mathbb{R}^2$ and $\mathbf{z}(t) \in
+  \mathbb{R}^3$]\hspace{2.6cm} are respectively the projection of the
+  robot center of mass on the floor ($z = 0$) and the Zero Momentum
+  Point position at time $t$.
+\item[$\mathbf{\gamma_{\text{la}}}(t) \in \text{SE}(3)$, $\mathbf{\gamma_{\text{ra}}}(t)
+  \in \text{SE}(3)$]\hspace{3.4cm} denote respectively left ankle and
+  right ankle trajectories.
+\item[$\theta(t) \in \text{SE}(3)$]\hspace{0.8cm} is the estimated
+  camera pose at time $t$.
+\end{description}
+
+The set of trajectories $\mathbf{\gamma_{\text{la}}}$,
+$\mathbf{\gamma_{\text{ra}}}$ and $\mathbf{c}$ define a complete
+balanced walking movement and is denoted $\mathbf{\Gamma}$. It can be
+completed by an additional trajectory which define the upper-body
+configuration during the walk. Changes in the upper-body posture do
+not impact the walking movement as long as the center of mass
+trajectory is respected. Therefore, this article will not mention
+upper-body trajectory although the final experiment contains arms and
+head movement.
+
 \subsection{Robotics Architecture}
 
-In this section the main components of our robotics framework for
-reliable trajectory estimation will be described. The HRP-2 robot
-embeds two computers. One is dedicated to motor control and the other
-one to vision processing. Fig.~\ref{fig:framework_overview}
-illustrates the complete robotics distributed infrastructure used in
-this experiment. It relies heavily on both OpenHRP and ROS to
-integration the different modules altogether.
+The proposed architecture can be divided in two parts:
+\begin{enumerate}
+\item The vision processing and localization components which are
+  responsible for acquiring data on the two robots camera, computing
+  an estimation of the camera pose and deducing the robot
+  localization.
+\item The control system which follows the planned trajectory while
+  closing the loop on the localization data.
+\end{enumerate}
+
+These two systems are running on two different computers embedded on
+the robot. They are composed of several robotics components running
+simultaneously. Fig.~\ref{fig:framework_overview} illustrates the
+complete robotics infrastructure. To communicate, we rely heavily on
+both OpenHRP and ROS middlewares.
 %
 \begin{figure}[ht!]
   \begin{center}
@@ -25,288 +75,192 @@ integration the different modules altogether.
     taking into account execution
     errors.\label{fig:framework_overview}}
 \end{figure}
-% The control is based on a task based
-controller~\cite{Mansard09icar}. A task is a function which associates
-\mbox{$\mathbf{q} \in \mathcal{C}$} the robot configuration to
-\mbox{$e(\mathbf{q}) \in \mathbb{R}$} an error. The controller embeds
-a solver which is able to generate a control law which minimizes the
-error for a given stack of tasks.
 
-\begin{enumerate}
-\item Using a given stack of tasks, this controller computes the joint
-  velocities $\mathbf{\dot{q}}$ which realizes the tasks. Our stack of
-  tasks ensures that the left ankle, right ankle, center of mass and
-  upper level posture reference positions are followed. The reference
-  trajectories are computed off-line by the planner described in
-  \cite{Dalibard11humanoids}.
-\item The reference trajectories can be post-processed by the
-  controller to reshape them on the fly. The controller has been
-  extended to incorporate a module which can, given an execution error
-  estimation, cancel them automatically by changing the future robot
-  trajectory.
-\item This estimation of the execution error is computed on the
-  computer dedicated to vision. By comparing the planned left ankle
-  trajectory and the estimated one, it is possible to compute an
-  estimation of the execution error.
-\item The planned left ankle position is computed using both the
-  camera position and the relative transformation from the camera to
-  the left ankle. This transformation can be deduced from the robot
-  configuration and its model using forward kinematics.
-\end{enumerate}
+\paragraph{Vision-based localization}
 
-\subsection{Closed-loop tracking}
+The vision system relies on two Flea2 FireWire cameras. They have been
+set up to grab monochrome images synchronously at 30\hertz. The image
+resolution is $320 \times 240$.
 
-Closed-loop trajectory tracking consists in following a precomputed
-trajectory while compensating for execution errors. Systems are often
-composed of four components:
-\begin{enumerate}
-\item a trajectory generator component,
-\item a localization component providing an estimation of the robot
-  position,
-\item an error estimation component computing the error between the
-  planned position and the localization of the robot,
-\item and a component reshaping the planned trajectory to compensate
-  for the above error.
-\end{enumerate}
+Images are transmitted to the vision component. It is in charge of
+image rectification and current camera pose computation. This process
+is described in detail in section~\ref{sec:vision}.  During our
+experiments, the pose estimation rate was around 16\hertz.
 
 
-The trajectory generator provides two reference data: the footstep
-sequence, a set of footsteps $S_i$ such as \mbox{$0 \leq i \leq
-  n^{\text{step}}$} and a whole-body trajectory \mbox{$\gamma(t \in
-  [t_{\text{min}}, t_{\text{max}}]) \in \mathcal{C}$}. One advantage
-of the proposed control scheme is to alter the future footstep
-positions to avoid singularities. Given a known perturbation of the
-footstep sequence, it is then possible to deduce the correction that
-should be applied to the feet and center of mass trajectories. Once
-those trajectories are computed, inverse geometry can be used to
-regenerate the joints trajectories.
+\paragraph{Error estimation}
 
-
-One iteration of the control loop is described by
-Algorithm~\ref{fig:control_loop} and can be summarized as:
-\begin{enumerate}
-\item estimate the robot position,
-\item compute the position error \mbox{$\delta \mathbf{x}$},
-\item filter the error to avoid perturbing too much the initial
-  trajectory and to absorb localization noise,
-\item recompute the next steps positions to compensate execution
-  errors and make sure the feet will land on the planned position,
-\item check if the recomputed next step is feasible,
-\item regenerate smooth trajectories for the feet, center of mass and
-  ZMP.
-\item regenerate the joints trajectories. This step is denoted by
-  \mbox{$\gamma \bigoplus \delta \gamma$} in the algorithm. The
-  \mbox{$\gamma \bigoplus \delta \gamma$} operation returns $\gamma$
-  altered by the rigid transformation \mbox{$\delta \gamma$}. $\delta
-  \gamma$ is the perturbation applied to the whole-body trajectory and
-  is not directly computed as the inverse geometry is directly applied
-  on the updated body positions.
-\end{enumerate}
-
-
-\begin{algorithm}
-  \begin{algorithmic}
-    \REQUIRE {$\gamma$, $t_{\text{current}}, t_{\text{next\_correction}}$}
-    \ENSURE {$\gamma$, $t_{\text{current}}, t_{\text{next\_correction}}$}
-    \IF {$\gamma(t_{\text{current}})$ is double support \AND
-      $t_{\text{current}} \geq t_{\text{next\_correction}}$}
-    \STATE estimate robot position $\mathbf{\hat{x}}$
-    \STATE compute robot position error $\delta \mathbf{x}$
-    \STATE compute offset $\delta \gamma$ absorbing the execution
-    error $\delta \mathbf{x}$
-    \IF {the perturbation $\delta \gamma$ can be applied}
-    \STATE $\forall t \in [t_{\text{current}}, t_{\text{max}}],
-    \gamma(t) \leftarrow \gamma(t) \bigoplus \delta \gamma(t)$
-    \STATE $t_{\text{next\_correction}} \leftarrow t_{\text{current}} + 2 T_{\text{step}}$
-    \ENDIF
-    \ENDIF
-    \STATE $\mathbf{q} \leftarrow \gamma(t_{\text{current}})$
-    \STATE $t_{\text{current}} \leftarrow t_{\text{current}} + \Delta t$
-  \end{algorithmic}
-  \caption{Control loop at time $t_{\text{current}}$ achieving a
-    closed-loop following of trajectory $\gamma$ (next correction will
-    be applied at
-    $t_{\text{next\_correction}}$). \label{fig:control_loop}}
-\end{algorithm}
-
-
-First, the robot position $\hat{\mathbf{x}}$ is perceived. The
-localization system will not be detailed in this paper, see
-\cite{08ijhr.stasse, 06humanoids.thompson} for instance for more
-details. Although common limitations of these systems are taken into
-account. The precision of the robot estimation does not decrease over
-time, but can vary during the execution. This produces a noise which
-may perturb the control scheme. The localization system can also fail
-to provide an estimation or even sometimes provide aberrant values.
-
-Secondly, an error $\mathbf{\delta \mathbf{x}}$ is computed by
-comparing the planned and estimated position of the tracked reference
-body. A threshold is applied to this value to bound the applied
-corrections. In practice, it also filters out outliers and the noise
-that the localization system may introduce in the system.
-
-Then, the relative position of the next footstep w.r.t. to the current
-one is changed to compensate the perceived
-error. Fig.~\ref{fig:footstepreplan} illustrates this process.
-
-
-From this point, smooth trajectories can be regenerated for feet and
-center of mass. To ensure smoothness, the trajectory correction is
-progressively applied during the next two steps. To finish, joint
-values are recomputed using these new reference trajectories.
-
-
-
-Additionally, a test is added to check that a correction can be
-computed for the current time $t_{\text{current}}$. A correction can
-be applied if no correction is being applied,
-i.e.\ \mbox{$t_{\text{current}} \geq t_{\text{next\_correction}}$} and if the
-robot is in the double support phase. Indeed starting a correction in
-the middle of a step would be dangerous and starting a correction
-while another correction is being applied would lead to erroneous
-results.
-
-
-Previous works such as \cite{04humanoids.harada, 07icra.morisawa} aim
-at allowing sudden changes in the robot trajectory. The proposed
-control scheme is different and aim at following as closely as
-possible a preplanned trajectory.
-
-
-\paragraph{Estimation of the position error}
-
-We make the assumption that an external system provides
-\mbox{$\hat{\mathbf{x}} \in \text{SE}(2)$}, an estimation of the
-current robot position.
-
-If $\mathbf{x} \in \text{SE}(2)$ is the robot planned position and
-$\hat{\mathbf{x}} \in \text{SE}(2)$ the robot localization, the
-position error is defined by:
+The error estimation component computes $\mathbf{\delta x} \in
+\text{SE}(3)$, the transformation from the perceived robot position to
+the planned robot position and is defined at time $t$ as:
 
 \begin{equation} \label{eq:errorpos}
-  \mathbf{\delta x} = \mathbf{x} . \hat{\mathbf{x}}^{-1}
+  \mathbf{\delta x}_t = \mathbf{x}_t . \hat{\mathbf{x}}_t^{-1}
 \end{equation}
 
-In Eq. (\ref{eq:errorpos}), $\mathbf{\delta x}(t)$ can be
-interpreted as the planned robot position with respect to the current
-robot position at time $t$. By consequence, at the beginning of the
-trajectory $t_{\text{min}}$, the error is always equal to zero:
+However, $\hat{\mathbf{x}}_t^{-1}$ is not directly provided by the
+localization which estimates the camera pose and not the robot
+pose. The transformation from the camera to the left ankle (defining
+the robot position) can be easily deduced from the control and is not
+subject to significant execution errors as joint encoders allow
+low-level reliable servoing.
 
-\begin{equation} \label{eq:errorpos_prop}
-  \delta \mathbf{x}(t_{\text{min}}) = 0
+Additionally, the control is used to help the camera pose
+estimation. Indeed, to estimate a 3d pose, it is necessary to estimate
+six parameters; three for the translation: $x$, $y$, $z$ and three for
+the rotation: roll, pitch, and yaw. Nevertheless, we know for sure
+that the camera height $z$ and two of the three parameters of the
+rotation cannot drift nor have significant execution errors while
+walking on a flat ground. This explains why, in practice, only three
+parameters are estimated using the vision components whereas the $z$,
+roll and pitch parameters are known from the plan.
+
+\paragraph{Closed-loop trajectory following}
+
+To achieve walking and compute motor control, the task based control
+framework described in~\cite{Mansard09icar} is used. One interesting
+feature of this approach is that we can directly add tasks to follow
+ankles and center of mass reference trajectories. The inverse
+kinematics computation will then be implicitly realized by the task
+resolution.
+
+Our control scheme adds an additional step which processes the
+reference trajectories to compensate for execution errors based on the
+error estimation.
+
+Let us consider that at time $t$, the robot is on double support
+(i.e.\ both feet on the ground) and that an estimation of the
+execution error $\mathbf{\delta \mathbf{x}}(t)$ is available. We have
+to alter the trajectories of the left ankle, right ankle and center of
+mass simultaneously while preserving robot balance. As we cannot
+change a foot position while it is on contact with the floor, we have
+to modify the trajectories during the two following steps to be able
+to correct both feet trajectories. To do so, we will sum each
+trajectory with a trajectory dependent third order polynomial denoted
+by $\mathbf{\Delta}_{\text{la}} \in \text{SE(3)}$,
+$\mathbf{\Delta}_{\text{ra}} \in \text{SE(3)}$,
+$\mathbf{\Delta}_{\mathbf{c}} \in \mathbb{R}^2$:
+
+\begin{equation}
+  \begin{aligned}
+    \mathbf{\gamma}'_{\text{la}}(t) = \mathbf{\Delta}_{la}(t) . \mathbf{\gamma}'_{\text{la}}(t)\\
+    \mathbf{\gamma}'_{\text{ra}}(t) = \mathbf{\Delta}_{ra}(t) . \mathbf{\gamma}'_{\text{ra}}(t)\\
+    \mathbf{c}'(t) = \mathbf{\Delta}_{c}(t) + \mathbf{c}(t)
+  \end{aligned}
+  \label{eq:cst_delta}
 \end{equation}
 
-\paragraph{Footstep sequence modification}
-
-
-Given a position error of the waist, it is possible to alter the
-remaining steps in the footstep sequence to absorb this offset.
-
-The purpose of this step is to take into consideration that the
-previous step has not been executed correctly, leading to a different
-relative position than the one which has been initially planned. To
-cancel the error, the next footsteps positions will be modified
-so that the robot will step in the planned locations.
-
-
-The footstep positions are \mbox{$S \in
-  \text{SE}(2)^{n^\text{step}}$}. Let consider $\mathbf{\delta {x}}$,
-the current position error, \mbox{$S^{\text{future}} \subset S$} the
-steps which have not been played yet. The footstep positions will be
-changed according to the following computation:
-
-\begin{equation} \label{eq:footstepmodif}
-  \forall s \in S^{\text{future}}, s \gets \mathbf{\delta {x}} . s
-\end{equation}
-
-
-\paragraph{Whole-body trajectories modification}
-
-A new placement of the next feet has been computed. It is now necessary
-to modify the two feet and the center of mass trajectories
-synchronously to reach the corrected foot prints.
-
-The correction is computed by considering the simplified model
-introduced in section \ref{problem}. Hence, no hypothesis is done on
-the strategy used to plan the reference trajectories. One interest of
-this approach is to totally dissociate the planning and correction
-algorithms. To compute a small perturbation the simplified model is
-sufficient. It allows extremely reactive correction without
-compromising the overall trajectory quality.
-
-
-The linearized inverse pendulum model allows the computation of the
-center of mass trajectory $\mathbf{c}(t)$ given a ZMP trajectory
-$\mathbf{z}(t)$ by solving Eq.~(\ref{eq:zmp1}). Considering $\mathbf{r}$ a
-polynomial depending only of $\mathbf{z}$, $(V_x, V_y, W_x, W_y)$ free
-parameters used to constrain the initial position and velocity of the
-center of mass, a general following form of a polynomial center of
-mass trajectory is:
-
-\begin{equation} \label{eq:zmpsol}
-  \mathbf{c}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} + \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t)
-\end{equation}
-
-Given the formulation in Eq.~(\ref{eq:zmpsol}), it is possible to
-continuously modify the center of mass trajectory to make it follow
-\mbox{$\bar{\mathbf{z}}(t)$} the corrected trajectory. This new
-trajectory can be expressed as the sum of two polynomials:
-
-\begin{equation} \label{eq:zmpsolcor}
-  \bar{\mathbf{c}}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
-  \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t) + \mathbf{\Delta}(t)
-\end{equation}
-
-To apply smoothly the correction from $t_1$ to $t_2$, several
-constraints expressed in Eq.~\ref{eq:cst} have to be respected.
-$\delta \mathbf{x}_x$ and $\delta \mathbf{x}_y$ are respectively the
-$x$ and $y$ components of the 2d rigid transformation $\delta
-\mathbf{x}$.
+Let $t_1$ be the end of the next step and $t_2$ the end of the second
+next step. If the first step is realized with the left foot (i.e.\ the
+right foot is the support foot). In Eq.~\ref{eq:cst_delta}, if
+$\Delta$ provides a correction from $t_{\text{start}}$ to
+$t_{\text{end}}$, we consider the following constraints:
 
 \begin{equation}
 \begin{aligned}
-  \mathbf{\Delta}(t_1) &= 0\\
-  \mathbf{\Delta}(t_2) &= \left(
-  \begin{array}{c}
-    \delta \mathbf{x}_x \\
-    \delta \mathbf{x}_y
-  \end{array}
-  \right)\\
+  \mathbf{\Delta}(t) =
+  \begin{cases}
+    0.,  & \mbox{if }t\mbox{$\leq t_{\text{start}}$} \\
+    \mathbf{\delta x}, & \mbox{if }t\mbox{$\geq t_{\text{end}}$}
+  \end{cases}\\
   \frac{\partial \mathbf{\Delta}}{\partial t}(t_1) = \frac{\partial
     \mathbf{\Delta}}{\partial t}(t_2) &= 0
 \end{aligned}
-\label{eq:cst}
+\label{eq:deltaConstraints}
 \end{equation}
 
-These four constraints determine the polynomial four parameters
-leading to the curve illustrated by Fig.~\ref{fig:transition}.
+The constraints expressed in Eq.~\ref{eq:deltaConstraints} insures
+that the correction is smooth: null velocity at the beginning and end
+of the correction and that the error is correctly compensated. They
+are independent from the corrected trajectory (ankles or center of
+mass). These four constraints fully determine the four coefficients of
+the polynomial.
+
+The starting and timing correction time depends on the corrected trajectory:
+\begin{description}
+\item[center of mass ($\mathbf{\Delta_c}(t)$):]\hspace{3cm}
+  $t_{\text{start}} = t$,~~$t_{\text{end}} = t_1$
+\item[left ankle ($\mathbf{\Delta_{\text{la}}}(t)$):]\hspace{3cm}
+  $t_{\text{start}} = t$,~~$t_{\text{end}} = t_1$
+\item[right ankle ($\mathbf{\Delta_{\text{ra}}}(t)$):]\hspace{3cm}
+  $t_{\text{start}} = t_1$, $t_{\text{end}} = t_2$
+\end{description}
 
 
-This reshapes the center of mass trajectory by taking advantage of the
-linear formulation of the simplified model. Additionally, the feet
-trajectories are modified to reach the corrected positions at the end
-of the step. The smooth correction is also obtained by using a third
-degree polynomial with similar constraints: initial position remains
-as before, the goal position must fit the corrected position and the
-velocity of the correction is equal to zero at the beginning and the
-end of the transition. Fig.~\ref{fig:traj} compares resulting
-trajectories before and after the correction.
+The remaining issue is insuring that the updated trajectory will be
+balanced. A classical approach is using the Zero Momentum Point: this
+virtual point acts as a criterion to determine whether a trajectory is
+balanced or not. If it lies in the convex hull of the robot contact
+points all the time, the trajectory is balanced, otherwise it is
+not. The ZMP is defined as:
+%
+\begin{equation} \label{eq:zmp1}
+  \mathbf{z} = \mathbf{c} + \frac{1}{m(\ddot{c}_z +
+    g)}\left(\begin{array}{ccc} 0 &-1 &0\\1 &0 &0\end{array}\right)
+    \mathbf{\dot{\textbf{L}}} - \frac{c_z}{\ddot{c}_z + g}
+    \ddot{\mathbf{c}}
+\end{equation}
+%
+where $c_z$ is the height of the center of mass with respect to the
+ground, $m$ is the mass of the robot, $g$ is the gravity constant,
+\mbox{$\mathbf{c}=(c_x,c_y)$} is the projection of the center mass of
+the robot on the ground and $\textbf{L}$ is the angular momentum of
+the robot about the center of mass.
 
 
-These three corrections must be executed in the correct order: as
-stated before a correction is computed during a double support phase
-and applied during the next two steps. We will make the assumption,
-without any loss of generality, that the next flying foot is the left
-one. In that case the correction of the left foot is progressively
-applied during the single support phase. During the ZMP shift of this
-step, the center of mass correction is also applied. Then, during the
-next step, the correction of the right foot is applied. The timeline
-of the correction is illustrated by Fig.~\ref{fig:traj}.
+Solving this equation is time consuming as it is non-linear and
+requires dynamics computation. Under additional assumptions detailed
+in~\cite{Kajita01iros}, we can obtain a simplified linear model:
+%
+\begin{equation} \label{eq:zmp2}
+  \mathbf{z} = \mathbf{c} - \frac{\mathbf{c}_z}{g} . \ddot{\mathbf{x}}
+\end{equation}
+%
+Considering $\mathbf{r}$ a polynomial depending only of $\mathbf{z}$,
+$(V_x, V_y, W_x, W_y)$ free parameters used to constrain the initial
+position and velocity of the center of mass, a general solution of
+Eq.~\ref{eq:zmp2} is:
+%
+\begin{equation} \label{eq:zmpsol}
+  \mathbf{c}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} + \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t)
+\end{equation}
+%
+Given the formulation in Eq.~(\ref{eq:zmpsol}), it is possible to
+continuously modify the center of mass trajectory to make it follow
+\mbox{$\mathbf{z}'(t)$} the corrected trajectory. This new
+trajectory can be expressed as the sum of two polynomials:
 
+\begin{equation} \label{eq:zmpsolcor}
+  \mathbf{c}'(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
+  \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t) + \mathbf{\Delta}(t)
+\end{equation}
 
-\PFA{This section can be dedicated to the control and planning framework}
+It appears then that moving the center of mass final position of
+$\mathbf{\delta x}$ is equivalent to moving the ZMP final position of
+$\mathbf{\delta x}$ then solving the linear differential equation. As
+the flying foot end position is transformed similarly, the ZMP will
+stay in the convex hull contact points for any correction value
+$\mathbf{\delta x}$. The only limitations are feet velocities limits
+and assumptions realized when using the simplified linear model.
+
+To correct properly the robot trajectory, a correction of about two to
+three centimeters every two steps is sufficient. In this particular
+case, the simplified linear model is particularly suited as the
+dynamical effects of such changes are so low they can be safely
+ignored.
+
+When a correction is completely applied, i.e.\ $t > t_2$, a new
+correction is computed using the current estimation of the execution
+error.
+
+By combining, vision-based localization, error estimation and
+closed-loop trajectory following, our control framework can reshape
+walking trajectories on the fly to reliably track the planned
+trajectory. We will focus the discussion in the next section on how to
+localize the camera precisely.
 
 %%% Local Variables:
 %%% ispell-local-dictionary: "american"
-%%% LocalWords:  odometry HRP
+%%% LocalWords:  odometry HRP Euclidian OpenHRP ROS middlewares FireWire ZMP
+%%% LocalWords:  servoing
 %%% End:
