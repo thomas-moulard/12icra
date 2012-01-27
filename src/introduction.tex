@@ -27,7 +27,17 @@ reasonable hint on the current robot motion. 2D maps can also be used
 to simplify the navigation through indoor environments. This is not
 the case on a legged robot on which 3D localization is required and
 where no encoder based reliable odometry exists~\citep{Hornung10iros}.
-
+%
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width=.9\linewidth]{images/demo1.JPG}
+  \end{center}
+  \caption{HRP-2 dropping a ball on a shelf after having navigated
+    through an indoor environment. Navigation followed by manipulation
+    are typical scenarii where walking drift can prevent a task from
+    being accomplished.\label{fig:xp_final}}
+\end{figure}
+%
 Both of these reasons make localization a cornerstone of reliable
 trajectory execution on humanoid robots. To obtain an accurate
 localization of the robot in the environment, we employ fast
@@ -49,14 +59,6 @@ experimental results are discussed and compared to motion capture data
 in \ref{sec:results}. Finally the project roadmap is described in
 \ref{sec:conclusions}.
 
-\begin{figure}[ht]
-  \begin{center}
-    \TM{I usually put a big picture of the final demo here to make the
-      first page looks nicer.}
-  \end{center}
-  \caption{HRP-2 robot navigating through an indoor environment while
-    localizing itself.\label{fig:xp_final}}
-\end{figure}
 
 %%% Local Variables:
 %%% ispell-local-dictionary: "american"

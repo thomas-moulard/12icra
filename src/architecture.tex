@@ -93,11 +93,11 @@ experiments, the pose estimation rate was around 16\hertz.
 The error estimation component computes $\mathbf{\delta x} \in
 \text{SE}(3)$, the transformation from the perceived robot position to
 the planned robot position and is defined at time $t$ as:
-
+%
 \begin{equation} \label{eq:errorpos}
   \mathbf{\delta x}_t = \mathbf{x}_t . \hat{\mathbf{x}}_t^{-1}
 \end{equation}
-
+%
 However, $\hat{\mathbf{x}}_t^{-1}$ is not directly provided by the
 localization which estimates the camera pose and not the robot
 pose. The transformation from the camera to the left ankle (defining
@@ -144,7 +144,7 @@ trajectory with a trajectory dependent third order polynomial denoted
 by $\mathbf{\Delta}_{\text{la}} \in \text{SE(3)}$,
 $\mathbf{\Delta}_{\text{ra}} \in \text{SE(3)}$,
 $\mathbf{\Delta}_{\mathbf{c}} \in \mathbb{R}^2$:
-
+%
 \begin{equation}
   \begin{aligned}
     \mathbf{\gamma}'_{\text{la}}(t) = \mathbf{\Delta}_{la}(t) . \mathbf{\gamma}'_{\text{la}}(t)\\
@@ -153,13 +153,13 @@ $\mathbf{\Delta}_{\mathbf{c}} \in \mathbb{R}^2$:
   \end{aligned}
   \label{eq:cst_delta}
 \end{equation}
-
+%
 Let $t_1$ be the end of the next step and $t_2$ the end of the second
 next step. If the first step is realized with the left foot (i.e.\ the
 right foot is the support foot). In Eq.~\ref{eq:cst_delta}, if
 $\Delta$ provides a correction from $t_{\text{start}}$ to
 $t_{\text{end}}$, we consider the following constraints:
-
+%
 \begin{equation}
 \begin{aligned}
   \mathbf{\Delta}(t) =
@@ -172,7 +172,7 @@ $t_{\text{end}}$, we consider the following constraints:
 \end{aligned}
 \label{eq:deltaConstraints}
 \end{equation}
-
+%
 The constraints expressed in Eq.~\ref{eq:deltaConstraints} insure that
 the correction is smooth: null velocity at the beginning and end of
 the correction and that the error is correctly compensated. They are
@@ -233,12 +233,12 @@ Given the formulation in Eq.~(\ref{eq:zmpsol}), it is possible to
 continuously modify the center of mass trajectory to make it follow
 \mbox{$\mathbf{z}'(t)$} the corrected trajectory. This new
 trajectory can be expressed as the sum of two polynomials:
-
+%
 \begin{equation} \label{eq:zmpsolcor}
   \mathbf{c}'(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
   \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t) + \mathbf{\Delta}(t)
 \end{equation}
-
+%
 It appears then that moving the center of mass final position of
 $\mathbf{\delta x}$ is equivalent to moving the ZMP final position of
 $\mathbf{\delta x}$ then solving the linear differential equation. As
