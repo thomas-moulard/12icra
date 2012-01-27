@@ -33,7 +33,7 @@ accomplished.
 
 The camera trajectory estimated by the localization algorithm is
 validated using motion capture data. Markers have been placed on both
-the robot head (FIXME and left foot?) to provide ground truth.
+the robot head and left ankle to provide ground truth.
 
 
 Finally, the camera position is given by the algorithm described in
@@ -44,24 +44,32 @@ vision computer running the vision based localization node is a
 Intel\textregistered Core\texttrademark\ 2 CPU T7200~@~2.00GHz with
 2Gb.\ of RAM.
 
+During the experiments, the robot sometimes failed to drop the ball
+properly. It was either due to a bad initialization which sometimes
+lead to localization failure or to robot flexibility. Indeed, the
+shelves is quite narrow and the robot ankles passive joints were
+generating hands movements which were causing collisions, even though
+the robot localization is precise enough. It would be interesting in a
+future work to not only localize the robot with respect to an absolute
+frame but also switch to a task based localization at the end to
+correct the hand trajectory and avoid collisions.
+
 
 \subsection{Comparison to Motion Capture Data}\label{sec:mocap}
 
-The Table.~\ref{tab:mocap_comparison} contains the camera position
+The Fig.~\ref{tab:mocap_comparison} contains the camera position
 estimated by the motion capture system and by the localization
-algorithm. The mean error is FIXME meters and FIXME rad. Drop in the
+algorithm. The mean error is 0.2 meters in translation. Drop in the
 algorithm precision can occur when the robot enters a part of the map
 which is not dense enough or where the environment does not
-incorporate enough texture to detect enough interest points.
-%FIXME we will see depending on the final data...
-
+incorporate enough texture to detect enough interest points. It
+happens in our scenario near the end when the camera is too close to
+the shelf to perceive its environment correctly.
 
 The used motion capture system is a Motion Analysis system relying on
 six Eagles and four Hawks cameras. It provides an estimation of the
 camera position at 200\hertz~with a precision error of less than one
 centimeter.
-
-%FIXME write conclusion -> summarize results.
 
 \begin{figure}[ht!]
   \begin{center}
@@ -72,7 +80,16 @@ centimeter.
 \end{figure}
 
 \subsection{Timing Evaluation}\label{sec:timing}
-\PFA{Here there should be a table for timing evaluation, describing the mean computation times of the vision and control systems}
+
+On our platform, the vision localization module returned a pose at
+around 16\hertz. On the opposite, the HRP-2 robot uses a control loop
+at 200\hertz. To preserve real-time, the real-time component was
+communicating the robot configuration asynchronously at around
+75\hertz. The error estimation components was running at a mean rate
+of 10\hertz. As a correction is added every two steps, it was not
+useful to evaluate the error at a higher frequency.
+
+
 %%% Local Variables:
 %%% ispell-local-dictionary: "american"
 %%% LocalWords:  odometry HRP
