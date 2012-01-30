@@ -9,13 +9,13 @@ Before describing the robot architecture, let us introduce the following notatio
 \item[$\mathbf{x}_{\text{ref}}(t) \in \text{SE}(3)$] \hspace{1.2cm} is the robot planned trajectory.
 \item[$\mathbf{\hat{x}}(t) \in \text{SE}(3)$] \hspace{.8cm} is the robot trajectory as perceived by the localization system.
 \item[$\mathbf{c}(t) \in \mathbb{R}^2$ and $\mathbf{z}(t) \in
-  \mathbb{R}^3$]\hspace{2.6cm} are respectively the projection of the robot center of mass on the floor ($z = 0$) and the Zero Momentum Point position at time $t$.
+  \mathbb{R}^2$]\hspace{2.6cm} are respectively the projection of the robot center of mass on the floor ($z = 0$) and the Zero Momentum Point position at time $t$.
 \item[$\mathbf{\gamma_{\text{la}}}(t) \in \text{SE}(3)$, $\mathbf{\gamma_{\text{ra}}}(t)
   \in \text{SE}(3)$]\hspace{3.4cm} denote respectively left ankle and right ankle trajectories.
 \item[$\theta(t) \in \text{SE}(3)$]\hspace{0.8cm} is the estimated camera pose at time $t$.
 \end{description}
 
-The set of trajectories $\mathbf{\gamma_{\text{la}}}$, $\mathbf{\gamma_{\text{ra}}}$ and $\mathbf{c}$ defines a complete balanced walking movement and is denoted $\mathbf{\Gamma}$. It can be completed by an additional trajectory which defines the upper-body configuration during the walk. Changes in the upper-body posture do not impact the walking movement as long as the center of mass trajectory is respected. Therefore, this article will not mention upper-body trajectory although the final experiment contains arms and head movement.
+The set of trajectories $\mathbf{\gamma_{\text{la}}}$, $\mathbf{\gamma_{\text{ra}}}$ and $\mathbf{c}$ defines a complete balanced walking movement and is denoted $\mathbf{\Gamma}$. It can be completed by an additional trajectory which defines the upper-body configuration during the walk. Changes in the upper-body posture do not impact the walking movement as long as the center of mass trajectory is unchanged and the induced angular momenta variations remain small. Therefore, this article will not mention upper-body trajectory although the final experiment contains arms and head movement.
 
 \subsection{Robotics Architecture}
 
@@ -35,7 +35,6 @@ complete robotics infrastructure. To communicate, we rely heavily on both OpenHR
   \caption{Complete robotics framework overview. Let $\mathbf{I}_{\text{left}}$, $\mathbf{I}_{\text{right}}$ be respectively the left and right camera images. $\mathit{T}_{\text{cam}}$, $\mathit{\hat{T}}_{\text{cam}}$ respectively the planned and estimated camera position. $\mathbf{\gamma}$ the concatenation of the left ankle, right ankle, upper body and center of mass trajectories. $\mathbf{\gamma'}$ the trajectories reshaped by taking into account execution errors.\label{fig:framework_overview}}
 \end{figure}
 %
-\PFA{We need to replace Visual SLAM for Vision-Based Localization in the above figure}
 \paragraph{Vision-Based Localization}
 The vision system relies on two Flea2 FireWire cameras. They have been set up to grab monochrome images synchronously at 30~\hertz.\PFA{We have a problem here. If we say the system is real-time, we can't capture at 30 fps, since we are loosing frames. Doing the capture at 15 fps seems better} The image resolution is $320 \times 240$. We use the two cameras that are attached to the ears of the HRP-2 robot. These two cameras have a baseline of approximately 14.4~cm and an horizontal field of view of $90^{\circ}$ for each of the cameras
 
@@ -88,14 +87,17 @@ $\Delta$ provides a correction from $t_{\text{start}}$ to $t_{\text{end}}$, we c
     0.,  & \mbox{if }t\mbox{$\leq t_{\text{start}}$} \\
     \mathbf{\delta x}, & \mbox{if }t\mbox{$\geq t_{\text{end}}$}
   \end{cases}\\
-  \frac{\partial \mathbf{\Delta}}{\partial t}(t_1) = \frac{\partial
-    \mathbf{\Delta}}{\partial t}(t_2) &= 0
+  \dot{\mathbf{\Delta}}(t_1) = \dot{\mathbf{\Delta}}(t_2) &= 0
 \end{aligned}
 \label{eq:deltaConstraints}
 \end{equation}
 %
-The constraints expressed in Eq.~\ref{eq:deltaConstraints} insure that the correction is smooth: null velocity at the beginning and end of the correction and that the error is correctly compensated. They are
-independent of the corrected trajectory (ankles or center of mass). These four constraints fully determine the four coefficients of the polynomial.
+The constraints expressed in Eq.~\ref{eq:deltaConstraints} ensures us
+that the correction is smooth: zero velocity at the beginning and end
+of the correction and that the error is correctly compensated. They
+are independent of the corrected trajectory (ankles or center of
+mass). These four constraints fully determine the four coefficients of
+the polynomial.
 
 The starting and timing correction time depends on the corrected trajectory:
 \begin{description}
@@ -119,10 +121,13 @@ The remaining issue is ensuring that the updated trajectory will be balanced. A 
 where $c_z$ is the height of the center of mass with respect to the ground, $m$ is the mass of the robot, $g$ is the gravity constant, \mbox{$\mathbf{c}=(c_x,c_y)$} is the projection of the center mass of
 the robot on the ground and $\textbf{L}$ is the angular momentum of the robot about the center of mass.
 
-Solving this equation is time consuming as it is nonlinear and requires dynamics computation. Under additional assumptions detailed in~\cite{Kajita01iros}, we can obtain a simplified linear model:
+Solving this equation is time consuming as it is nonlinear and
+requires dynamics computation. Under the asumption that $L$ and $c_z$
+is constant in time~\cite{Kajita01iros}, we can obtain the follwing simplified
+linear model:
 %
 \begin{equation} \label{eq:zmp2}
-  \mathbf{z} = \mathbf{c} - \frac{\mathbf{c}_z}{g} . \ddot{\mathbf{x}}
+  \mathbf{z} = \mathbf{c} - \frac{\mathbf{c}_z}{g} . \ddot{\mathbf{c}}
 \end{equation}
 %
 Considering $\mathbf{r}$ a polynomial depending only of $\mathbf{z}$, $(V_x, V_y, W_x, W_y)$ free parameters used to constrain the initial position and velocity of the center of mass, a general solution of
@@ -143,8 +148,10 @@ It appears then that moving the center of mass final position of $\mathbf{\delta
 the flying foot end position is transformed similarly, the ZMP will stay in the convex hull contact points for any correction value $\mathbf{\delta x}$. The only limitations are feet velocities limits
 and assumptions realized when using the simplified linear model.
 
-To correct properly the robot trajectory, a correction of about two to three centimeters\PFA{Why not using cm here and in the rest of the paper?} every two steps is sufficient. In this case, the simplified linear model is particularly well suited as the dynamical
-effects of such changes are so low they can be safely ignored.
+To correct properly the robot trajectory, a correction of about two to
+three cm every two steps is sufficient. In this case, the simplified
+linear model is particularly well suited as the dynamical effects of
+such changes are so low they can be safely ignored.
 
 When a correction is completely applied, i.e.\ $t > t_2$, a new correction is computed using the current estimation of the execution error.
 
