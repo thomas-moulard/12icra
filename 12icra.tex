@@ -1,15 +1,18 @@
-\documentclass[conference]{IEEEtran}
+\documentclass[a4paper, 10pt, conference]{ieeeconf}
+
+\IEEEoverridecommandlockouts
+\overrideIEEEmargins
+
 \usepackage{times}
 
-\ifCLASSINFOpdf
-  \usepackage[pdftex]{graphicx}
-  \graphicspath{images/}
-\else
-  \usepackage[dvips]{graphicx}
-  \graphicspath{images/}
-\fi
+\usepackage[pdftex]{graphicx}
+\graphicspath{images/}
 
 % numbers option provides compact numerical references in the text.
+\makeatletter
+\let\NAT@parse\undefined
+\makeatother
+
 \usepackage[numbers]{natbib}
 \usepackage{multicol}
 \usepackage[bookmarks=true]{hyperref}
@@ -31,72 +34,30 @@
 \newcommand{\TM}[1]{}
 \newcommand{\OS}[1]{}
 
+\title{\LARGE \bf Reliable Indoor Navigation on Humanoid Robots using
+  Vision-Based Localization}
+%
+\author{Thomas Moulard$^{1}$, Pablo Alcantarilla$^{2}$, Florent Lamiraux$^{1}$, Olivier Stasse$^{1}$, Frank Dellaert$^{3}$}%
+\thanks{$^{1}$T. Moulard, F. Lamiraux, O. Stasse are with LAAS-CNRS,%
+  7, avenue du Colonel Roche 31077 Toulouse CEDEX 04%
+  {\tt\small thomas.moulard at gmail.com}}%
+\thanks{$^{2}$ FIXME {\tt\small fixme at fixme.com}}%
+\thanks{$^{3}$ FIXME {\tt\small fixme at fixme.com}}%
+%
 \begin{document}
 
-\title{Reliable Indoor Navigation on Humanoid Robots using
-  Vision-Based Localization}
-
-% You will get a Paper-ID when submitting a pdf file to the conference system
-\author{Author Names Omitted for Anonymous Review. Paper-ID [add your ID here]}
-
-%\author{\authorblockN{Michael Shell}
-%\authorblockA{School of Electrical and\\Computer Engineering\\
-%Georgia Institute of Technology\\
-%Atlanta, Georgia 30332--0250\\
-%Email: mshell@ece.gatech.edu}
-%\and
-%\authorblockN{Homer Simpson}
-%\authorblockA{Twentieth Century Fox\\
-%Springfield, USA\\
-%Email: homer@thesimpsons.com}
-%\and
-%\authorblockN{James Kirk\\ and Montgomery Scott}
-%\authorblockA{Starfleet Academy\\
-%San Francisco, California 96678-2391\\
-%Telephone: (800) 555--1212\\
-%Fax: (888) 555--1212}}
-
-
-% avoiding spaces at the end of the author lines is not a problem with
-% conference papers because we don't use \thanks or \IEEEmembership
-
-
-% for over three affiliations, or if they all won't fit within the width
-% of the page, use this alternative format:
-%
-%\author{\authorblockN{Michael Shell\authorrefmark{1},
-%Homer Simpson\authorrefmark{2},
-%James Kirk\authorrefmark{3},
-%Montgomery Scott\authorrefmark{3} and
-%Eldon Tyrell\authorrefmark{4}}
-%\authorblockA{\authorrefmark{1}School of Electrical and Computer Engineering\\
-%Georgia Institute of Technology,
-%Atlanta, Georgia 30332--0250\\ Email: mshell@ece.gatech.edu}
-%\authorblockA{\authorrefmark{2}Twentieth Century Fox, Springfield, USA\\
-%Email: homer@thesimpsons.com}
-%\authorblockA{\authorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
-%Telephone: (800) 555--1212, Fax: (888) 555--1212}
-%\authorblockA{\authorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
-
-% LAAS authors:
-%\author{ \parbox{3 in}{\centering Thomas Moulard, Florent Lamiraux, Olivier Stasse\\
-%    LAAS-CNRS, Universit\'e de Toulouse\\
-%    7, avenue du Colonel Roche\\
-%    31077 Toulouse cedex 4, France\\
-%    {\tt\small thomas.moulard@laas.fr}}
-%}
-
 \maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
 
 \begin{abstract}
 Reliable localization on a humanoid robot is a \textit{sine qua non} condition to succeed in realizing complex robotics scenarios. Before dealing with perturbations and online modification of the environment, one has to make sure that the planned trajectory alone will be correctly followed. This paper demonstrates that a control framework suited to humanoid robots relying on a vision-based localization system can achieve this goal. Our localization framework is based on a real-time vision-based localization system that assumes that a pre-existing 3D map of the environment exists and allows to obtain accurate results in complex robotics scenarios. By compensating for execution errors such as drifts and robot model errors, the HRP-2 robot is able to achieve high precision tasks. 
 \end{abstract}
 
-\begin{IEEEkeywords}
+\begin{keywords}
   Humanoid robots, Localization, Motion Planning, Robot Control, Stereo Vision
-\end{IEEEkeywords}
-
-\IEEEpeerreviewmaketitle
+\end{keywords}
 
 \input{src/introduction.tex}
 \input{src/related_work.tex}
