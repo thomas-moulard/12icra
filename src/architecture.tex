@@ -12,7 +12,7 @@ Before describing the robot architecture, let us introduce the following notatio
   \mathbb{R}^2$]\hspace{2.6cm} are respectively the projection of the robot center of mass on the floor ($z = 0$) and the Zero Momentum Point position at time $t$.
 \item[$\mathbf{\gamma_{\text{la}}}(t) \in \text{SE}(3)$, $\mathbf{\gamma_{\text{ra}}}(t)
   \in \text{SE}(3)$]\hspace{3.4cm} denote respectively left ankle and right ankle trajectories.
-\item[$\theta(t) \in \text{SE}(3)$]\hspace{0.8cm} is the estimated camera pose at time $t$.
+\item[$\theta(t) \in \text{SE}(6)$]\hspace{0.8cm} is the estimated camera pose (translation and rotation) at time $t$.
 \end{description}
 
 The set of trajectories $\mathbf{\gamma_{\text{la}}}$, $\mathbf{\gamma_{\text{ra}}}$ and $\mathbf{c}$ defines a complete balanced walking movement and is denoted $\mathbf{\Gamma}$. It can be completed by an additional trajectory which defines the upper-body configuration during the walk. Changes in the upper-body posture do not impact the walking movement as long as the center of mass trajectory is unchanged and the induced angular momenta variations remain small. Therefore, this article will not mention upper-body trajectory although the final experiment contains arms and head movement.

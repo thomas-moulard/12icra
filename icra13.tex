@@ -1,0 +1,75 @@
+\documentclass[a4paper, 10pt, conference]{ieeeconf}
+
+\IEEEoverridecommandlockouts
+\overrideIEEEmargins
+
+\usepackage{times}
+
+\usepackage[pdftex]{graphicx}
+\graphicspath{images/}
+
+% numbers option provides compact numerical references in the text.
+\makeatletter
+\let\NAT@parse\undefined
+\makeatother
+
+\usepackage[numbers]{natbib}
+\usepackage{multicol}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage{algorithmic, algorithm}
+
+\usepackage[squaren, Gray, cdot]{SIunits}
+
+
+\title{\LARGE \bf Reliable Indoor Navigation on Humanoid Robots\\
+  using Vision-Based Localization}
+%
+\author{Thomas Moulard$^{1}$, Pablo F. Alcantarilla$^{2}$, Florent Lamiraux$^{1}$, Olivier Stasse$^{1}$, Frank Dellaert$^{3}$%
+\thanks{$^{1} $T.\ Moulard, F.\ Lamiraux, O.\ Stasse are with LAAS-CNRS; 7, avenue du Colonel Roche 31077 Toulouse France {\tt\small thomas.moulard@gmail.com}}%
+\thanks{$^{2}$ P.F.\ Alcantarilla is with ISIT-UMR 6284 CNRS, Universit\'e d'Auvergne, Clermont Ferrand, France {\tt\small pablofdezalc@gmail.com}}%
+\thanks{$^{3}$ F.\ Dellaert is with School of Interactive Computing, Georgia Institute of Technology, Atlanta, GA 30332, USA. {\tt\small dellaert@cc.gatech.edu}}%
+}
+
+
+% Commands and other stuff
+\DeclareMathOperator*{\argmin}{arg\,min}
+%\newcommand{\PFA}[1]{{\color{red}\fbox{PFA:} #1}}
+%\newcommand{\TM}[1]{{\color{blue}\fbox{TM:} #1}}
+%\newcommand{\OS}[1]{{\color{green}\fbox{OS:} #1}}
+
+\newcommand{\PFA}[1]{}
+\newcommand{\TM}[1]{}
+\newcommand{\OS}[1]{}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+\begin{abstract}
+Reliable localization on a humanoid robot is a \textit{sine qua non} condition to succeed in realizing complex robotics scenarios. Before dealing with perturbations and online modification of the environment, one has to make sure that the planned trajectory alone will be correctly followed. This paper demonstrates that a control framework suited to humanoid robots relying on a vision-based localization system can achieve this goal. Our localization framework is based on a real-time vision-based localization system that assumes that a pre-existing 3D map of the environment exists and allows to obtain accurate results in complex robotics scenarios. By compensating for execution errors such as drifts and robot model errors, the HRP-2 robot is able to achieve high precision tasks. 
+\end{abstract}
+
+\begin{keywords}
+  Humanoid robots, Localization, Motion Planning, Robot Control, Stereo Vision
+\end{keywords}
+
+\input{src/introduction.tex}
+\input{src/related_work.tex}
+\input{src/architecture.tex}
+\input{src/vision.tex}
+\input{src/xp_results.tex}
+\input{src/conclusion.tex}
+
+\section*{Acknowledgments}
+
+%% Use plainnat to work nicely with natbib.
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
